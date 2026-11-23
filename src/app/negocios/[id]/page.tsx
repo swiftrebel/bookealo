@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BusinessSchedulePreview } from "@/components/businesses/BusinessSchedulePreview";
+import {
+  BusinessServicesSection,
+  type ServiceWithSchedules,
+} from "@/components/businesses/BusinessServicesSection";
 import { Artwork } from "@/components/ui/Artwork";
-import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import {
   ChevronLeftIcon,
-  ClockIcon,
   ExternalLinkIcon,
   MapPinIcon,
   PhoneIcon,
 } from "@/components/ui/Icons";
-import { EmptyState } from "@/components/ui/States";
 import { getAuthContext } from "@/lib/auth";
-import { formatUSD } from "@/lib/currency";
+import { getNextPanamaDays } from "@/lib/dates";
 import { createClient } from "@/lib/supabase/server";
 import { parseAmenities, type ScheduleRow } from "@/types/database";
 
@@ -56,11 +56,18 @@ export async function generateMetadata({
 
 export default async function BusinessDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{
+    reservar?: string | string[];
+    fecha?: string | string[];
+    hora?: string | string[];
+  }>;
 }) {
-  const { id } = await params;
-  const [supabase, auth] = await Promise.all([
+  const [{ id }, resolvedSearchParams, supabase, auth] = await Promise.all([
+    params,
+    searchParams,
     createClient(),
     getAuthContext(),
   ]);
@@ -102,11 +109,25 @@ export default async function BusinessDetailPage({
     });
   }
 
+  const servicesWithSchedules: ServiceWithSchedules[] = serviceList.map(
+    (service) => ({
+      id: service.id,
+      name: service.name,
+      price: Number(service.price),
+      slot_duration_minutes: service.slot_duration_minutes,
+      is_roofed: service.is_roofed,
+      schedules: schedulesByService.get(service.id) ?? [],
+    }),
+  );
+
   const amenities = parseAmenities(business.amenities);
-  const safeMapsUrl = isSafeHttpUrl(business.maps_url) ? business.maps_url : null;
-  const isNonCustomerRole =
-    auth.profile?.role === "business_owner" ||
-    auth.profile?.role === "super_admin";
+  const safeMapsUrl = isSafeHttpUrl(business.maps_url)
+    ? business.maps_url
+    : null;
+  const next14Days = getNextPanamaDays(14);
+
+  const firstParam = (val: string | string[] | undefined) =>
+    Array.isArray(val) ? (val[0] ?? null) : (val ?? null);
 
   return (
     <div className="space-y-8">
@@ -182,73 +203,21 @@ export default async function BusinessDetailPage({
         </div>
       </section>
 
-      {/* Aviso si el usuario tiene rol que no puede reservar */}
-      {isNonCustomerRole && (
-        <Card className="border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-200">
-          Necesitas una cuenta de cliente para reservar.
-        </Card>
-      )}
-
-      {/* Servicios activos */}
-      <section className="space-y-4">
-        <div className="flex items-baseline justify-between gap-4">
-          <h2 className="text-[23px] font-bold tracking-[-0.02em] text-white">
-            Servicios disponibles
-          </h2>
-          <span className="text-xs font-semibold text-[#a99ec4]">
-            {serviceList.length}{" "}
-            {serviceList.length === 1 ? "servicio" : "servicios"}
-          </span>
-        </div>
-
-        {serviceList.length === 0 ? (
-          <EmptyState
-            icon="⚽"
-            title="No hay servicios activos en este momento"
-            description="Este negocio aún no tiene servicios habilitados para reservar."
-          />
-        ) : (
-          <div className="grid gap-4">
-            {serviceList.map((service) => {
-              const serviceSchedules = schedulesByService.get(service.id) ?? [];
-              return (
-                <Card key={service.id} className="p-5">
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-bold text-white">
-                          {service.name}
-                        </h3>
-                        <Badge tone={service.is_roofed ? "info" : "neutral"}>
-                          {service.is_roofed ? "Techado" : "Aire libre"}
-                        </Badge>
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-3 text-sm text-[#a99ec4]">
-                        <span className="inline-flex items-center gap-1.5">
-                          <ClockIcon className="h-4 w-4 text-[#ff5e7e]" />
-                          {service.slot_duration_minutes} min por turno
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="text-2xl font-extrabold tracking-tight text-white">
-                        {formatUSD(service.price)}
-                      </p>
-                      <p className="text-xs text-[#a99ec4]">
-                        por turno ({service.slot_duration_minutes} min)
-                      </p>
-                    </div>
-                  </div>
-
-                  <BusinessSchedulePreview schedules={serviceSchedules} />
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </section>
+      {/* Servicios activos + flujo de reserva interactivo */}
+      <BusinessServicesSection
+        business={{
+          id: business.id,
+          name: business.name,
+          zone: business.zone,
+          cancellation_policy: business.cancellation_policy,
+        }}
+        services={servicesWithSchedules}
+        days={next14Days}
+        userRole={auth.profile?.role ?? null}
+        initialServiceId={firstParam(resolvedSearchParams.reservar)}
+        initialDateStr={firstParam(resolvedSearchParams.fecha)}
+        initialSlotTime={firstParam(resolvedSearchParams.hora)}
+      />
 
       {/* Política de cancelación e información de pago */}
       <section className="grid gap-4 sm:grid-cols-2">
