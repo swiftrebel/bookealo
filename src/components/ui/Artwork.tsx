@@ -1,14 +1,10 @@
 "use client";
 
-import { useState } from "react";
-
-const GRADIENTS: readonly [string, string][] = [
+const COURT_GRADIENTS: readonly [string, string][] = [
   ["#3ddc6a", "#08501f"],
-  ["#3aa0ff", "#04224f"],
-  ["#c777ff", "#3b1066"],
-  ["#ff5e7e", "#7a1034"],
-  ["#ffb340", "#7a2e05"],
   ["#2ad4a0", "#07473a"],
+  ["#34c759", "#0a6b2d"],
+  ["#4cd964", "#0b3d1a"],
 ];
 
 export function getGradientForSeed(seed: string): [string, string] {
@@ -16,8 +12,8 @@ export function getGradientForSeed(seed: string): [string, string] {
   for (let i = 0; i < seed.length; i += 1) {
     hash = (hash * 31 + seed.charCodeAt(i)) | 0;
   }
-  const index = Math.abs(hash) % GRADIENTS.length;
-  return GRADIENTS[index];
+  const index = Math.abs(hash) % COURT_GRADIENTS.length;
+  return COURT_GRADIENTS[index];
 }
 
 type ArtworkProps = {
@@ -30,50 +26,46 @@ type ArtworkProps = {
 };
 
 export function Artwork({
-  src,
   alt,
   seed,
   size = "card",
   className = "",
   showHoverBadge = false,
 }: ArtworkProps) {
-  const [failed, setFailed] = useState(false);
   const [from, to] = getGradientForSeed(seed);
-  const hasImage = Boolean(src && !failed);
-  const initials = alt
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
 
   const sizeClass =
     size === "sm"
-      ? "h-14 w-14 rounded-[12px] text-lg shrink-0"
+      ? "h-14 w-14 rounded-[12px] text-[26px] shrink-0"
       : size === "hero"
-        ? "h-full w-full rounded-[24px] text-6xl"
-        : "aspect-square w-full rounded-[16px] text-4xl shadow-[0_10px_26px_rgba(0,0,0,0.4)]";
+        ? "h-full w-full rounded-[24px]"
+        : "aspect-square w-full rounded-[16px] text-[64px] shadow-[0_10px_26px_rgba(0,0,0,0.4)]";
 
   return (
     <div
-      className={`relative grid place-items-center overflow-hidden border border-white/15 font-extrabold tracking-tight text-white/90 ${sizeClass} ${size === "card" ? "bk-art-card" : ""} ${className}`}
+      role="img"
+      aria-label={alt}
+      className={`relative grid place-items-center overflow-hidden border border-white/15 ${sizeClass} ${size === "card" ? "bk-art-card" : ""} ${className}`}
       style={{
-        background: `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.32), transparent 45%), linear-gradient(145deg, ${from}, ${to})`,
+        background:
+          size === "hero"
+            ? `radial-gradient(circle at 80% 10%, rgba(255,255,255,0.32), transparent 50%), linear-gradient(150deg, ${from}, ${to})`
+            : `radial-gradient(circle at 30% 20%, rgba(255,255,255,0.34), transparent 45%), linear-gradient(145deg, ${from}, ${to})`,
       }}
     >
-      {hasImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={src ?? ""}
-          alt={alt}
-          loading={size === "hero" ? "eager" : "lazy"}
-          onError={() => setFailed(true)}
-          className="h-full w-full object-cover"
-        />
+      {size === "hero" ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute left-0 right-0 top-6 text-center text-[130px] leading-none drop-shadow-[0_18px_24px_rgba(0,0,0,0.4)] transition duration-500 group-hover:scale-105 group-hover:-rotate-3 min-[900px]:left-auto min-[900px]:right-[8%] min-[900px]:top-1/2 min-[900px]:-translate-y-1/2 min-[900px]:text-[200px]"
+        >
+          ⚽
+        </span>
       ) : (
-        <span className="select-none drop-shadow-[0_10px_18px_rgba(0,0,0,0.35)]">
-          {initials || "BK"}
+        <span
+          aria-hidden="true"
+          className="select-none leading-none drop-shadow-[0_10px_18px_rgba(0,0,0,0.35)]"
+        >
+          ⚽
         </span>
       )}
 
