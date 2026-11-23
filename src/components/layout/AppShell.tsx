@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { logoutAction } from "@/actions/auth";
+import { Artwork } from "@/components/ui/Artwork";
 import {
   BookingsIcon,
   CalendarIcon,
@@ -15,11 +16,23 @@ import {
   ShieldIcon,
   UserIcon,
 } from "@/components/ui/Icons";
+import { formatPanamaDate, formatPanamaTime } from "@/lib/dates";
 import type { ProfileRow } from "@/types/database";
+
+export type NextBookingPreview = {
+  id: string;
+  businessId: string | null;
+  businessName: string;
+  businessCoverUrl: string | null;
+  serviceName: string;
+  startTime: string;
+};
 
 type AppShellProps = {
   userEmail: string | null;
   profile: ProfileRow | null;
+  navBadgeCount?: number;
+  nextBooking?: NextBookingPreview | null;
   children: ReactNode;
 };
 
@@ -29,16 +42,24 @@ type NavItem = {
   shortLabel: string;
   icon: ReactNode;
   matchExact?: boolean;
+  badgeCount?: number;
 };
 
-function isActivePath(pathname: string, href: string, matchExact?: boolean): boolean {
+function isActivePath(
+  pathname: string,
+  href: string,
+  matchExact?: boolean,
+): boolean {
   if (matchExact || href === "/") {
     return pathname === href;
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function getInitials(fullName: string | null | undefined, email: string | null | undefined): string {
+function getInitials(
+  fullName: string | null | undefined,
+  email: string | null | undefined,
+): string {
   const source = fullName?.trim() || email?.trim() || "U";
   const parts = source.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
@@ -53,7 +74,13 @@ function getRoleBadgeText(role: ProfileRow["role"]): string {
   return "Cliente";
 }
 
-export function AppShell({ userEmail, profile, children }: AppShellProps) {
+export function AppShell({
+  userEmail,
+  profile,
+  navBadgeCount = 0,
+  nextBooking = null,
+  children,
+}: AppShellProps) {
   const pathname = usePathname();
   const isAuthPage = pathname === "/login" || pathname === "/registro";
 
@@ -69,6 +96,7 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
           shortLabel: "Reservas",
           icon: <CalendarIcon className="h-5 w-5" />,
           matchExact: true,
+          badgeCount: navBadgeCount,
         },
         {
           href: "/panel/servicios",
@@ -124,6 +152,7 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
           label: "Mis reservas",
           shortLabel: "Reservas",
           icon: <BookingsIcon className="h-5 w-5" />,
+          badgeCount: navBadgeCount,
         },
         {
           href: "/perfil",
@@ -184,12 +213,23 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
     );
   }
 
+  const showMiniBar =
+    role === "customer" &&
+    Boolean(nextBooking) &&
+    pathname !== "/mis-reservas";
+
   return (
     <div className="min-h-screen">
       {/* Sidebar escritorio (>= 900px), fiel a #side en design-reference */}
       <aside className="bk-sidebar fixed inset-y-0 left-0 z-25 hidden w-[264px] flex-col border-r border-white/10 px-4 py-7 min-[900px]:flex">
         <Link
-          href={role === "business_owner" ? "/panel" : role === "super_admin" ? "/admin" : "/"}
+          href={
+            role === "business_owner"
+              ? "/panel"
+              : role === "super_admin"
+                ? "/admin"
+                : "/"
+          }
           className="mx-2 mb-6 flex items-center gap-2.5 text-[22px] font-extrabold tracking-[-0.03em] text-white"
         >
           <span className="bk-grad grid h-[34px] w-[34px] place-items-center rounded-[10px] text-lg font-bold text-white shadow-[0_8px_20px_rgba(255,45,149,0.3)]">
@@ -198,7 +238,10 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
           Bookealo
         </Link>
 
-        <nav className="flex flex-1 flex-col gap-1" aria-label="Navegación principal">
+        <nav
+          className="flex flex-1 flex-col gap-1"
+          aria-label="Navegación principal"
+        >
           {navItems.map((item) => {
             const active = isActivePath(pathname, item.href, item.matchExact);
             return (
@@ -212,7 +255,18 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
                 }`}
               >
                 {item.icon}
-                <span>{item.label}</span>
+                <span className="flex-1">{item.label}</span>
+                {item.badgeCount && item.badgeCount > 0 ? (
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                      active
+                        ? "bg-white/25 text-white"
+                        : "bg-[#ff3b6b] text-white"
+                    }`}
+                  >
+                    {item.badgeCount}
+                  </span>
+                ) : null}
               </Link>
             );
           })}
@@ -255,7 +309,13 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
       {/* Barra superior móvil compacta */}
       <header className="bk-glass sticky top-0 z-20 flex items-center justify-between border-b border-white/10 px-5 pb-3 pt-[calc(var(--sat)+10px)] min-[900px]:hidden">
         <Link
-          href={role === "business_owner" ? "/panel" : role === "super_admin" ? "/admin" : "/"}
+          href={
+            role === "business_owner"
+              ? "/panel"
+              : role === "super_admin"
+                ? "/admin"
+                : "/"
+          }
           className="flex items-center gap-2 text-lg font-extrabold tracking-[-0.03em] text-white"
         >
           <span className="bk-grad grid h-7 w-7 place-items-center rounded-[8px] text-sm font-bold text-white">
@@ -300,9 +360,45 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
       </header>
 
       {/* Contenido principal */}
-      <main className="min-h-screen px-5 pb-[calc(112px+var(--sab))] pt-6 min-[900px]:ml-[264px] min-[900px]:px-14 min-[900px]:pb-24 min-[900px]:pt-12">
+      <main
+        className={`min-h-screen px-5 pt-6 min-[900px]:ml-[264px] min-[900px]:px-14 min-[900px]:pb-28 min-[900px]:pt-12 ${
+          showMiniBar
+            ? "pb-[calc(176px+var(--sab))]"
+            : "pb-[calc(112px+var(--sab))]"
+        }`}
+      >
         <div className="mx-auto max-w-5xl">{children}</div>
       </main>
+
+      {/* Mini barra flotante de próxima reserva, fiel a #mini en design-reference */}
+      {showMiniBar && nextBooking && (
+        <div className="fixed inset-x-2 bottom-[calc(var(--sab)+64px)] z-19 min-[900px]:bottom-7 min-[900px]:left-auto min-[900px]:right-7 min-[900px]:w-[380px]">
+          <Link
+            href="/mis-reservas"
+            className="bk-glass flex w-full items-center gap-3 rounded-[18px] border border-white/10 py-2 pl-2 pr-4 shadow-[0_10px_30px_rgba(0,0,0,0.45)] transition hover:border-white/20"
+          >
+            <Artwork
+              src={nextBooking.businessCoverUrl}
+              alt={nextBooking.businessName}
+              seed={nextBooking.businessId ?? nextBooking.id}
+              size="sm"
+              className="h-11 w-11 rounded-[10px] text-sm"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-bold text-white">
+                {nextBooking.businessName} · {nextBooking.serviceName}
+              </p>
+              <p className="truncate text-xs capitalize text-[#a99ec4]">
+                Próxima · {formatPanamaDate(nextBooking.startTime)} ·{" "}
+                {formatPanamaTime(nextBooking.startTime)}
+              </p>
+            </div>
+            <span className="shrink-0 text-sm font-bold text-[#ff3b6b]">
+              Ver
+            </span>
+          </Link>
+        </div>
+      )}
 
       {/* Bottom tab bar móvil (< 900px), fiel a #tabs en design-reference */}
       <nav
@@ -315,11 +411,18 @@ export function AppShell({ userEmail, profile, children }: AppShellProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-1 flex-col items-center gap-0.5 text-[10px] font-semibold transition ${
+              className={`relative flex flex-1 flex-col items-center gap-0.5 text-[10px] font-semibold transition ${
                 active ? "text-[#ff3b6b]" : "text-[#a99ec4]"
               }`}
             >
-              {item.icon}
+              <span className="relative">
+                {item.icon}
+                {item.badgeCount && item.badgeCount > 0 ? (
+                  <span className="absolute -right-2 -top-1 grid min-w-4 place-items-center rounded-full bg-[#ff3b6b] px-1 text-[9px] font-extrabold text-white">
+                    {item.badgeCount}
+                  </span>
+                ) : null}
+              </span>
               <span>{item.shortLabel}</span>
             </Link>
           );

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { logoutAction } from "@/actions/auth";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { ProfileForm } from "@/components/profile/ProfileForm";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { requireRole } from "@/lib/auth";
 
@@ -16,37 +19,28 @@ export default async function PerfilPage() {
       <PageHeader
         eyebrow="Tu cuenta"
         title="Mi perfil"
-        subtitle="Tus datos de contacto para las reservas en Bookealo."
+        subtitle="Mantén actualizados tu nombre y teléfono para tus reservas."
+        action={<Badge tone="info">Cliente</Badge>}
       />
 
-      <Card className="max-w-xl space-y-4 p-6">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-bold text-white">Datos registrados</h2>
-          <Badge tone="info">Cliente</Badge>
+      <ProfileForm
+        initialFullName={profile.full_name ?? ""}
+        initialPhone={profile.phone ?? ""}
+        email={user.email ?? ""}
+      />
+
+      <Card className="flex max-w-xl flex-wrap items-center justify-between gap-4 p-5">
+        <div>
+          <p className="text-sm font-bold text-white">Cerrar sesión</p>
+          <p className="text-xs text-[#a99ec4]">
+            Sal de tu cuenta en este dispositivo.
+          </p>
         </div>
-
-        <dl className="grid gap-3 text-sm sm:grid-cols-2">
-          <div className="rounded-xl bg-white/[0.04] p-3.5">
-            <dt className="text-xs text-[#a99ec4]">Nombre completo</dt>
-            <dd className="mt-1 font-semibold text-white">
-              {profile.full_name || "Sin nombre"}
-            </dd>
-          </div>
-          <div className="rounded-xl bg-white/[0.04] p-3.5">
-            <dt className="text-xs text-[#a99ec4]">Teléfono</dt>
-            <dd className="mt-1 font-semibold text-white">
-              {profile.phone || "Sin teléfono"}
-            </dd>
-          </div>
-          <div className="rounded-xl bg-white/[0.04] p-3.5 sm:col-span-2">
-            <dt className="text-xs text-[#a99ec4]">Correo electrónico</dt>
-            <dd className="mt-1 font-semibold text-white">{user.email}</dd>
-          </div>
-        </dl>
-
-        <p className="text-xs text-[#a99ec4]">
-          La edición de nombre y teléfono se habilitará en la Fase 5.
-        </p>
+        <form action={logoutAction}>
+          <Button type="submit" variant="danger" size="sm">
+            Cerrar sesión
+          </Button>
+        </form>
       </Card>
     </div>
   );
