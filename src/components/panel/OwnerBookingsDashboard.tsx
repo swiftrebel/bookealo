@@ -164,7 +164,7 @@ export function OwnerBookingsDashboard({
     : null;
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-9">
       {/* Acciones principales del dueño */}
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={() => setSheetMode("manual")}>
@@ -180,10 +180,10 @@ export function OwnerBookingsDashboard({
       {feedback && (
         <div
           role={feedback.type === "error" ? "alert" : "status"}
-          className={`rounded-[14px] border px-4 py-3 text-sm font-medium ${
+          className={`rounded-[14px] border px-4 py-3 text-[14px] font-medium ${
             feedback.type === "error"
-              ? "border-[#ff3b6b]/40 bg-[#ff3b6b]/15 text-[#ff7a9b]"
-              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+              ? "border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] text-[#ff6961]"
+              : "border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] text-[#34c470]"
           }`}
         >
           {feedback.message}
@@ -191,8 +191,8 @@ export function OwnerBookingsDashboard({
       )}
 
       {/* Pestañas Pendientes / Próximas / Historial */}
-      <div className="space-y-3">
-        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 min-[900px]:mx-0 min-[900px]:px-0">
+      <div className="space-y-3.5">
+        <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto px-6 min-[900px]:mx-0 min-[900px]:px-0">
           {(
             [
               ["pending", "Pendientes", pendingList.length],
@@ -206,10 +206,10 @@ export function OwnerBookingsDashboard({
                 key={key}
                 type="button"
                 onClick={() => setActiveTab(key)}
-                className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                className={`bk-tx h-[36px] shrink-0 cursor-pointer rounded-full border px-4 text-[13px] font-medium tabular-nums ${
                   active
-                    ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.28)]"
-                    : "border-white/10 bg-white/[0.07] text-[#d9d0ee] hover:bg-white/[0.12]"
+                    ? "border-transparent bg-[#f5f5f7] text-black"
+                    : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
                 }`}
               >
                 {label} ({count})
@@ -220,17 +220,17 @@ export function OwnerBookingsDashboard({
 
         {/* Filtro rápido por servicio si hay más de uno */}
         {services.length > 1 && (
-          <div className="no-scrollbar -mx-5 flex items-center gap-1.5 overflow-x-auto px-5 min-[900px]:mx-0 min-[900px]:px-0">
-            <span className="mr-1 shrink-0 text-xs font-semibold text-[#a99ec4]">
+          <div className="no-scrollbar -mx-6 flex items-center gap-2 overflow-x-auto px-6 min-[900px]:mx-0 min-[900px]:px-0">
+            <span className="mr-1 shrink-0 text-[12px] font-medium text-[#86868b]">
               Servicio:
             </span>
             <button
               type="button"
               onClick={() => setServiceFilter("all")}
-              className={`shrink-0 cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold transition ${
+              className={`bk-tx h-[30px] shrink-0 cursor-pointer rounded-full border px-3 text-[12px] font-medium ${
                 serviceFilter === "all"
-                  ? "border-white/30 bg-white/15 text-white"
-                  : "border-white/10 bg-white/[0.04] text-[#a99ec4] hover:text-white"
+                  ? "border-white/25 bg-white/[0.12] text-[#f5f5f7]"
+                  : "border-white/[0.08] bg-[#111113] text-[#86868b] hover:text-[#f5f5f7]"
               }`}
             >
               Todos
@@ -240,10 +240,10 @@ export function OwnerBookingsDashboard({
                 key={service.id}
                 type="button"
                 onClick={() => setServiceFilter(service.id)}
-                className={`shrink-0 cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                className={`bk-tx h-[30px] shrink-0 cursor-pointer rounded-full border px-3 text-[12px] font-medium ${
                   serviceFilter === service.id
-                    ? "border-white/30 bg-white/15 text-white"
-                    : "border-white/10 bg-white/[0.04] text-[#a99ec4] hover:text-white"
+                    ? "border-white/25 bg-white/[0.12] text-[#f5f5f7]"
+                    : "border-white/[0.08] bg-[#111113] text-[#86868b] hover:text-[#f5f5f7]"
                 }`}
               >
                 {service.name}
@@ -257,11 +257,11 @@ export function OwnerBookingsDashboard({
       {visibleList.length === 0 ? (
         <EmptyState
           icon={
-            activeTab === "pending"
-              ? "✅"
-              : activeTab === "upcoming"
-                ? "🗓️"
-                : "📜"
+            activeTab === "pending" ? (
+              <CheckIcon className="h-5 w-5" />
+            ) : (
+              <CalendarIcon className="h-5 w-5" />
+            )
           }
           title={
             activeTab === "pending"
@@ -279,7 +279,7 @@ export function OwnerBookingsDashboard({
           }
         />
       ) : (
-        <div className="space-y-3">
+        <div className="border-t border-white/10">
           {visibleList.map((booking) => {
             const isBusy = busyBookingId === booking.id;
             const isPending = booking.status === "pending";
@@ -288,24 +288,27 @@ export function OwnerBookingsDashboard({
               (booking.status === "confirmed" || booking.status === "blocked");
 
             return (
-              <Card key={booking.id} className="p-4 sm:p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <article
+                key={booking.id}
+                className="border-b border-white/10 py-6"
+              >
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0 flex-1 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-base font-bold text-white">
+                      <h3 className="text-[17px] font-semibold tracking-[-0.015em] text-[#f5f5f7]">
                         {booking.serviceName}
                       </h3>
                       <BookingStatusBadge status={booking.status} />
                       {booking.isManual && <Badge tone="info">Manual</Badge>}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#a99ec4]">
-                      <span className="inline-flex items-center gap-1 capitalize text-white/90">
-                        <CalendarIcon className="h-3.5 w-3.5 text-[#ff5e7e]" />
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[13px] text-[#86868b]">
+                      <span className="inline-flex items-center gap-1.5 capitalize text-[#f5f5f7]/80">
+                        <CalendarIcon className="h-3.5 w-3.5 text-[#86868b]" />
                         {formatPanamaDate(booking.start_time)}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-white/90">
-                        <ClockIcon className="h-3.5 w-3.5 text-[#ff5e7e]" />
+                      <span className="inline-flex items-center gap-1.5 text-[#f5f5f7]/80 tabular-nums">
+                        <ClockIcon className="h-3.5 w-3.5 text-[#86868b]" />
                         {formatPanamaTimeRange(
                           booking.start_time,
                           booking.end_time,
@@ -315,22 +318,22 @@ export function OwnerBookingsDashboard({
 
                     {/* Datos del cliente o bloqueo */}
                     {booking.isBlocked ? (
-                      <p className="inline-flex items-center gap-1.5 text-xs text-violet-200/85">
+                      <p className="inline-flex items-center gap-1.5 text-[13px] text-[#b996ff]/85">
                         <LockIcon className="h-3.5 w-3.5" />
                         Horario bloqueado manualmente por el negocio
                       </p>
                     ) : (
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-                        <span className="inline-flex items-center gap-1.5 font-semibold text-white">
-                          <UserIcon className="h-4 w-4 text-[#a99ec4]" />
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[14px]">
+                        <span className="inline-flex items-center gap-1.5 font-medium text-[#f5f5f7]">
+                          <UserIcon className="h-4 w-4 text-[#86868b]" />
                           {booking.contactName || "Cliente"}
                         </span>
                         {booking.contactPhone && (
                           <a
                             href={`tel:${booking.contactPhone.replace(/\s+/g, "")}`}
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-[#ff5e7e] transition hover:text-white"
+                            className="bk-ul inline-flex items-center gap-1.5 text-[13px] tabular-nums"
                           >
-                            <PhoneIcon className="h-3.5 w-3.5" />
+                            <PhoneIcon className="h-3.5 w-3.5 text-[#86868b]" />
                             {booking.contactPhone}
                           </a>
                         )}
@@ -339,9 +342,9 @@ export function OwnerBookingsDashboard({
                   </div>
 
                   {/* Precio y acciones */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-3 sm:flex-col sm:items-end sm:border-t-0 sm:pt-0">
+                  <div className="flex flex-wrap items-center justify-between gap-4 sm:flex-col sm:items-end">
                     {!booking.isBlocked && (
-                      <p className="text-lg font-extrabold text-white">
+                      <p className="text-[19px] font-semibold tracking-[-0.02em] text-[#f5f5f7] tabular-nums">
                         {formatUSD(booking.total_price)}
                       </p>
                     )}
@@ -355,7 +358,7 @@ export function OwnerBookingsDashboard({
                             disabled={Boolean(busyBookingId)}
                             onClick={() => handleConfirmPending(booking)}
                           >
-                            <CheckIcon className="h-4 w-4" />
+                            <CheckIcon className="h-3.5 w-3.5" />
                             Confirmar
                           </Button>
                           <Button
@@ -386,21 +389,21 @@ export function OwnerBookingsDashboard({
                     </div>
                   </div>
                 </div>
-              </Card>
+              </article>
             );
           })}
         </div>
       )}
 
       {/* Datos del negocio en modo solo lectura */}
-      <section className="pt-2">
-        <Card className="space-y-4 p-5">
+      <section className="pt-4">
+        <Card className="space-y-5 p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-base font-bold text-white">
+              <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-[#f5f5f7]">
                 Información de tu negocio
               </h2>
-              <p className="text-xs text-[#a99ec4]">
+              <p className="mt-1 text-[13px] text-[#86868b]">
                 Solo lectura. Para actualizar estos datos, contacta al
                 administrador.
               </p>
@@ -410,16 +413,16 @@ export function OwnerBookingsDashboard({
             </Badge>
           </div>
 
-          <div className="grid gap-3 text-sm sm:grid-cols-2">
+          <div className="grid gap-3 text-[14px] sm:grid-cols-2">
             {business.zone && (
-              <div className="flex items-center gap-2 text-white/90">
-                <MapPinIcon className="h-4 w-4 shrink-0 text-[#ff5e7e]" />
+              <div className="flex items-center gap-2 text-[#f5f5f7]/85">
+                <MapPinIcon className="h-4 w-4 shrink-0 text-[#86868b]" />
                 <span>{business.zone}</span>
               </div>
             )}
             {business.phone && (
-              <div className="flex items-center gap-2 text-white/90">
-                <PhoneIcon className="h-4 w-4 shrink-0 text-[#ff5e7e]" />
+              <div className="flex items-center gap-2 text-[#f5f5f7]/85 tabular-nums">
+                <PhoneIcon className="h-4 w-4 shrink-0 text-[#86868b]" />
                 <span>{business.phone}</span>
               </div>
             )}
@@ -428,30 +431,26 @@ export function OwnerBookingsDashboard({
                 href={safeMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-semibold text-[#ff5e7e] hover:text-white"
+                className="bk-ul inline-flex w-fit items-center gap-1.5 text-[14px]"
               >
                 <span>Ver ubicación en Google Maps</span>
-                <ExternalLinkIcon className="h-4 w-4" />
+                <ExternalLinkIcon className="h-3.5 w-3.5" />
               </a>
             )}
           </div>
 
           {amenities.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {amenities.map((item) => (
-                <Badge key={item} tone="neutral">
-                  {item}
-                </Badge>
-              ))}
-            </div>
+            <p className="text-[14px] text-[#86868b]">
+              {amenities.join(" · ")}
+            </p>
           )}
 
           {business.cancellation_policy && (
-            <div className="rounded-xl bg-white/[0.04] p-3.5 text-xs text-[#a99ec4]">
-              <strong className="block text-white/90">
+            <div className="border-t border-white/[0.08] pt-4 text-[13px] text-[#86868b]">
+              <strong className="block font-medium text-[#f5f5f7]">
                 Política de cancelación
               </strong>
-              <p className="mt-1 leading-relaxed">
+              <p className="mt-1.5 leading-relaxed">
                 {business.cancellation_policy}
               </p>
             </div>

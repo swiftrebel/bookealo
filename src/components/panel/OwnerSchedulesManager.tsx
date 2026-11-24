@@ -9,7 +9,7 @@ import {
 } from "@/actions/schedules";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { ClockIcon } from "@/components/ui/Icons";
 import { EmptyState } from "@/components/ui/States";
 import { DAY_NAMES_FULL, formatTime24 } from "@/lib/dates";
 import type { ScheduleRow, ServiceRow } from "@/types/database";
@@ -108,16 +108,18 @@ function ServiceScheduleEditor({
   };
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-bold text-white">{service.name}</h2>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 className="text-[22px] font-semibold tracking-[-0.02em] text-[#f5f5f7]">
+              {service.name}
+            </h2>
             <Badge tone={service.is_active ? "confirmed" : "cancelled"}>
               {service.is_active ? "Activo" : "Inactivo"}
             </Badge>
           </div>
-          <p className="mt-0.5 text-xs text-[#a99ec4]">
+          <p className="mt-1 text-[13px] text-[#86868b]">
             Franjas cada {service.slot_duration_minutes} minutos · Hora de
             Panamá (UTC-5)
           </p>
@@ -136,28 +138,32 @@ function ServiceScheduleEditor({
       {feedback && (
         <div
           role={feedback.type === "error" ? "alert" : "status"}
-          className={`rounded-[14px] border px-4 py-3 text-sm font-medium ${
+          className={`rounded-[14px] border px-4 py-3 text-[14px] font-medium ${
             feedback.type === "error"
-              ? "border-[#ff3b6b]/40 bg-[#ff3b6b]/15 text-[#ff7a9b]"
-              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+              ? "border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] text-[#ff6961]"
+              : "border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] text-[#34c470]"
           }`}
         >
           {feedback.message}
         </div>
       )}
 
-      <div className="space-y-2.5">
+      <div className="border-t border-white/10">
         {days.map((day) => {
           const dayName = DAY_NAMES_FULL[day.day_of_week];
           return (
-            <Card
+            <div
               key={day.day_of_week}
-              className={`p-4 transition ${day.is_closed ? "opacity-75" : ""}`}
+              className={`border-b border-white/10 py-4 transition ${
+                day.is_closed ? "opacity-65" : ""
+              }`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center justify-between gap-3 sm:w-44">
-                  <span className="font-bold text-white">{dayName}</span>
-                  <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#a99ec4]">
+                <div className="flex items-center justify-between gap-4 sm:w-52">
+                  <span className="text-[15px] font-medium text-[#f5f5f7]">
+                    {dayName}
+                  </span>
+                  <label className="inline-flex cursor-pointer items-center gap-2 text-[13px] text-[#86868b]">
                     <input
                       type="checkbox"
                       checked={day.is_closed}
@@ -166,19 +172,19 @@ function ServiceScheduleEditor({
                           is_closed: e.target.checked,
                         })
                       }
-                      className="h-4 w-4 accent-[#ff3b6b]"
+                      className="h-4 w-4 accent-[#1d7f45]"
                     />
                     Cerrado
                   </label>
                 </div>
 
                 {day.is_closed ? (
-                  <p className="text-sm text-[#a99ec4]">
+                  <p className="text-[14px] text-[#86868b]">
                     Sin atención este día
                   </p>
                 ) : (
-                  <div className="flex flex-wrap items-center gap-3">
-                    <label className="flex items-center gap-2 text-xs font-semibold text-[#a99ec4]">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <label className="flex items-center gap-2.5 text-[13px] text-[#86868b]">
                       <span>Abre</span>
                       <input
                         type="time"
@@ -188,10 +194,10 @@ function ServiceScheduleEditor({
                             open_time: e.target.value,
                           })
                         }
-                        className="h-10 rounded-xl border border-white/10 bg-[rgba(26,15,44,0.8)] px-3 text-sm font-semibold text-white outline-none focus:border-[#ff3b6b]"
+                        className="h-10 rounded-[12px] border border-white/[0.09] bg-[#1a1a1c] px-3 text-[14px] font-medium text-[#f5f5f7] tabular-nums outline-none transition focus:border-white/25 focus:bg-[#222225]"
                       />
                     </label>
-                    <label className="flex items-center gap-2 text-xs font-semibold text-[#a99ec4]">
+                    <label className="flex items-center gap-2.5 text-[13px] text-[#86868b]">
                       <span>Cierra</span>
                       <input
                         type="time"
@@ -201,18 +207,18 @@ function ServiceScheduleEditor({
                             close_time: e.target.value,
                           })
                         }
-                        className="h-10 rounded-xl border border-white/10 bg-[rgba(26,15,44,0.8)] px-3 text-sm font-semibold text-white outline-none focus:border-[#ff3b6b]"
+                        className="h-10 rounded-[12px] border border-white/[0.09] bg-[#1a1a1c] px-3 text-[14px] font-medium text-[#f5f5f7] tabular-nums outline-none transition focus:border-white/25 focus:bg-[#222225]"
                       />
                     </label>
                   </div>
                 )}
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>
 
-      <div className="flex justify-end pt-2">
+      <div className="flex justify-end pt-3">
         <Button size="lg" loading={saving} onClick={handleSave}>
           {saving ? "Guardando..." : "Guardar horarios"}
         </Button>
@@ -236,14 +242,11 @@ export function OwnerSchedulesManager({
   if (services.length === 0) {
     return (
       <EmptyState
-        icon="🕒"
+        icon={<ClockIcon className="h-5 w-5" />}
         title="Crea un servicio primero"
         description="Necesitas al menos un servicio registrado para configurar sus horarios semanales."
         action={
-          <Link
-            href="/panel/servicios"
-            className="bk-grad-shadow inline-flex h-11 items-center justify-center rounded-[14px] px-5 text-sm font-bold text-white"
-          >
+          <Link href="/panel/servicios" className="bk-cta h-11 px-6 text-[14px]">
             Ir a Servicios
           </Link>
         }
@@ -255,9 +258,9 @@ export function OwnerSchedulesManager({
     services.find((s) => s.id === selectedServiceId) ?? services[0];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Selector de servicio */}
-      <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 min-[900px]:mx-0 min-[900px]:px-0">
+      <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto px-6 min-[900px]:mx-0 min-[900px]:px-0">
         {services.map((service) => {
           const active = service.id === activeService.id;
           return (
@@ -265,10 +268,10 @@ export function OwnerSchedulesManager({
               key={service.id}
               type="button"
               onClick={() => setSelectedServiceId(service.id)}
-              className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              className={`bk-tx h-[36px] shrink-0 cursor-pointer rounded-full border px-4 text-[13px] font-medium ${
                 active
-                  ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.28)]"
-                  : "border-white/10 bg-white/[0.07] text-[#d9d0ee] hover:bg-white/[0.12]"
+                  ? "border-transparent bg-[#f5f5f7] text-black"
+                  : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
               }`}
             >
               {service.name}

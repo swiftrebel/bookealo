@@ -19,9 +19,10 @@ export default async function HomePage() {
 
   if (businessesError) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <PageHeader
-          title="Inicio"
+          eyebrow="Panamá"
+          title="Encuentra tu cancha ideal"
           subtitle="Reserva canchas y servicios por horario en Panamá."
         />
         <ErrorState
@@ -71,14 +72,5 @@ export default async function HomePage() {
     },
   );
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Inicio"
-        subtitle="Reserva canchas y servicios por horario en Panamá."
-      />
-
-      <BusinessCatalog businesses={catalogBusinesses} />
-    </div>
-  );
+  return <BusinessCatalog businesses={catalogBusinesses} />;
 }

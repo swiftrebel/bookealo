@@ -8,10 +8,8 @@ import {
   type BookingDayOption,
 } from "@/components/booking/BookingSheet";
 import { BusinessSchedulePreview } from "@/components/businesses/BusinessSchedulePreview";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { ClockIcon } from "@/components/ui/Icons";
+import { CalendarIcon } from "@/components/ui/Icons";
 import { EmptyState } from "@/components/ui/States";
 import { formatUSD } from "@/lib/currency";
 import type { ScheduleRow, UserRole } from "@/types/database";
@@ -65,59 +63,54 @@ export function BusinessServicesSection({
   };
 
   return (
-    <section className="space-y-4">
+    <section aria-label="Servicios disponibles">
       {isNonCustomerRole && (
-        <Card className="border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-200">
+        <div className="mb-8 rounded-[16px] border border-[#ffa530]/25 bg-[rgba(255,159,10,0.1)] px-5 py-3.5 text-[14px] text-[#ffa530]">
           Necesitas una cuenta de cliente para reservar.
-        </Card>
+        </div>
       )}
 
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="text-[23px] font-bold tracking-[-0.02em] text-white">
+      <div className="flex items-baseline justify-between gap-4 pb-6">
+        <h2 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.03em] text-[#f5f5f7] min-[900px]:text-[44px]">
           Servicios disponibles
         </h2>
-        <span className="text-xs font-semibold text-[#a99ec4]">
+        <span className="shrink-0 text-[14px] text-[#86868b] tabular-nums">
           {services.length} {services.length === 1 ? "servicio" : "servicios"}
         </span>
       </div>
 
       {services.length === 0 ? (
         <EmptyState
-          icon="⚽"
+          icon={<CalendarIcon className="h-5 w-5" />}
           title="No hay servicios activos en este momento"
           description="Este negocio aún no tiene servicios habilitados para reservar."
         />
       ) : (
-        <div className="grid gap-4">
+        <div className="border-t border-white/10">
           {services.map((service) => (
-            <Card key={service.id} className="p-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-bold text-white">
-                      {service.name}
-                    </h3>
-                    <Badge tone={service.is_roofed ? "info" : "neutral"}>
-                      {service.is_roofed ? "Techado" : "Aire libre"}
-                    </Badge>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-[#a99ec4]">
-                    <span className="inline-flex items-center gap-1.5">
-                      <ClockIcon className="h-4 w-4 text-[#ff5e7e]" />
-                      {service.slot_duration_minutes} min por turno
-                    </span>
-                  </div>
+            <article
+              key={service.id}
+              className="border-b border-white/10 py-8 min-[900px]:py-10"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+                <div>
+                  <h3 className="text-[22px] font-semibold tracking-[-0.02em] text-[#f5f5f7] min-[900px]:text-[24px]">
+                    {service.name}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] text-[#86868b]">
+                    {service.is_roofed ? "Techado" : "Aire libre"} ·{" "}
+                    {service.slot_duration_minutes} min por turno
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                   <div className="text-right">
-                    <p className="text-2xl font-extrabold tracking-tight text-white">
+                    <div className="text-[22px] font-semibold tracking-[-0.02em] text-[#f5f5f7] tabular-nums min-[900px]:text-[24px]">
                       {formatUSD(service.price)}
-                    </p>
-                    <p className="text-xs text-[#a99ec4]">
+                    </div>
+                    <div className="text-[13px] text-[#86868b] min-[900px]:text-[14px]">
                       por turno ({service.slot_duration_minutes} min)
-                    </p>
+                    </div>
                   </div>
 
                   {canReserve && (
@@ -132,7 +125,7 @@ export function BusinessServicesSection({
               </div>
 
               <BusinessSchedulePreview schedules={service.schedules} />
-            </Card>
+            </article>
           ))}
         </div>
       )}

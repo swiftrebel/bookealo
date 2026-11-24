@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { OwnerServicesManager } from "@/components/panel/OwnerServicesManager";
+import { GridIcon } from "@/components/ui/Icons";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { requireRole } from "@/lib/auth";
 import { translateError } from "@/lib/errors";
@@ -41,7 +42,7 @@ export default async function PanelServiciosPage() {
           subtitle="Administra tus canchas o servicios reservables."
         />
         <EmptyState
-          icon="🏟️"
+          icon={<GridIcon className="h-5 w-5" />}
           title="Aún no tienes un negocio asignado"
           description="Cuando el administrador asigne un negocio a tu cuenta, podrás crear y administrar tus servicios desde aquí."
         />

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque } from "next/font/google";
+import { Inter } from "next/font/google";
 import {
   AppShell,
   type NextBookingPreview,
@@ -9,10 +9,11 @@ import { createClient } from "@/lib/supabase/server";
 import type { ProfileRow } from "@/types/database";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "600", "800"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0612",
+  themeColor: "#000000",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -134,8 +135,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   );
 
   return (
-    <html lang="es" className={`${bricolage.variable} h-full antialiased`}>
-      <body className="min-h-full">
+    <html lang="es" className={`${inter.variable} h-full antialiased`}>
+      <body className="min-h-full bg-black text-[#f5f5f7]">
         <AppShell
           userEmail={user?.email ?? null}
           profile={profile}

@@ -13,19 +13,19 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bk-grad-shadow text-white hover:brightness-110 active:scale-[0.98] disabled:opacity-35 disabled:shadow-none",
+    "bg-[#1d7f45] text-white hover:bg-[#22914e] hover:scale-[1.01] active:scale-[0.97] disabled:opacity-35 disabled:hover:scale-100 disabled:hover:bg-[#1d7f45]",
   secondary:
-    "bk-card text-white hover:bg-white/[0.12] active:scale-[0.98] disabled:opacity-40",
+    "border border-white/10 bg-[#1a1a1c] text-[#f5f5f7] hover:bg-[#222225] hover:border-white/18 active:scale-[0.97] disabled:opacity-40",
   ghost:
-    "bg-transparent text-[#a99ec4] hover:bg-white/[0.07] hover:text-white active:scale-[0.98] disabled:opacity-40",
+    "bg-transparent text-[#86868b] hover:bg-white/[0.06] hover:text-[#f5f5f7] active:scale-[0.97] disabled:opacity-40",
   danger:
-    "border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 text-[#ff5e7e] hover:bg-[#ff3b6b]/25 active:scale-[0.98] disabled:opacity-40",
+    "border border-[#ff6961]/25 bg-[rgba(255,69,58,0.14)] text-[#ff6961] hover:bg-[rgba(255,69,58,0.22)] active:scale-[0.97] disabled:opacity-40",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-9 px-3.5 text-sm rounded-xl gap-1.5",
-  md: "h-11 px-5 text-[15px] rounded-[14px] gap-2",
-  lg: "h-[52px] px-7 text-base rounded-[14px] gap-2",
+  sm: "h-9 px-4 text-[13px] rounded-full gap-1.5",
+  md: "h-11 px-6 text-[15px] rounded-full gap-2",
+  lg: "h-12 px-7 text-[15px] rounded-full gap-2",
 };
 
 export function Button({
@@ -43,7 +43,7 @@ export function Button({
     <button
       type={type}
       disabled={disabled || loading}
-      className={`inline-flex cursor-pointer items-center justify-center font-bold transition duration-200 disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`bk-tx inline-flex cursor-pointer items-center justify-center font-medium disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${fullWidth ? "w-full" : ""} ${className}`}
       {...props}
     >
       {loading && (

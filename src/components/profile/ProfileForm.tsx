@@ -28,16 +28,18 @@ export function ProfileForm({
   );
 
   return (
-    <Card className="max-w-xl p-6">
-      <h2 className="text-lg font-bold text-white">Editar datos de contacto</h2>
-      <p className="mt-1 text-xs text-[#a99ec4]">
+    <Card className="max-w-xl p-6 sm:p-7">
+      <h2 className="text-[19px] font-semibold tracking-[-0.02em] text-[#f5f5f7]">
+        Editar datos de contacto
+      </h2>
+      <p className="mt-1.5 text-[13px] text-[#86868b]">
         Los negocios verán tu nombre y teléfono cuando solicites una reserva.
       </p>
 
       {state.error && (
         <div
           role="alert"
-          className="mt-4 rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7a9b]"
+          className="mt-5 rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
         >
           {state.error}
         </div>
@@ -46,13 +48,13 @@ export function ProfileForm({
       {state.success && (
         <div
           role="status"
-          className="mt-4 rounded-[14px] border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm font-medium text-emerald-200"
+          className="mt-5 rounded-[14px] border border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] px-4 py-3 text-[13px] font-medium text-[#34c470]"
         >
           {state.success}
         </div>
       )}
 
-      <form action={formAction} className="mt-5 space-y-4">
+      <form action={formAction} className="mt-6 space-y-4">
         <Input
           id="profile-full-name"
           name="full_name"
@@ -83,7 +85,7 @@ export function ProfileForm({
           hint="El correo de acceso no se puede cambiar desde aquí."
         />
 
-        <div className="pt-2">
+        <div className="pt-3">
           <Button type="submit" size="lg" loading={isPending}>
             {isPending ? "Guardando..." : "Guardar cambios"}
           </Button>

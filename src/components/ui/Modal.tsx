@@ -40,27 +40,29 @@ export function Modal({
       aria-labelledby="modal-title"
     >
       <div
-        className="fixed inset-0 bg-[rgba(5,2,12,0.72)] backdrop-blur-sm"
+        className="fixed inset-0 bg-black/75 backdrop-blur-md"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-md rounded-[24px] border border-white/10 bg-[#130a22] p-6 shadow-2xl">
-        <div className="flex items-start justify-between gap-3">
+      <div className="bk-rise relative z-10 w-full max-w-md rounded-[24px] border border-white/10 bg-[#161618] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h2
               id="modal-title"
-              className="text-xl font-extrabold tracking-[-0.02em] text-white"
+              className="text-xl font-semibold tracking-[-0.025em] text-[#f5f5f7]"
             >
               {title}
             </h2>
             {description && (
-              <p className="mt-1.5 text-sm text-[#a99ec4]">{description}</p>
+              <p className="mt-2 text-[14px] leading-relaxed text-[#86868b]">
+                {description}
+              </p>
             )}
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white"
+            className="bk-tx grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full bg-white/[0.08] text-[#86868b] hover:bg-white/[0.14] hover:text-[#f5f5f7]"
           >
             <CloseIcon className="h-4 w-4" />
           </button>
@@ -108,10 +110,10 @@ export function ConfirmModal({
       description={description}
       footer={
         <>
-          <Button variant="ghost" onClick={onClose} disabled={loading}>
+          <Button variant="ghost" size="sm" onClick={onClose} disabled={loading}>
             {cancelLabel}
           </Button>
-          <Button variant={variant} onClick={onConfirm} loading={loading}>
+          <Button variant={variant} size="sm" onClick={onConfirm} loading={loading}>
             {confirmLabel}
           </Button>
         </>

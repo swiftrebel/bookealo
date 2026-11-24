@@ -6,9 +6,9 @@ type CardProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 const variantMap = {
-  default: "bk-card",
-  glass: "bk-glass border border-white/10",
-  surface: "bg-[#130a22] border border-white/10",
+  default: "bg-[#111113] border border-white/[0.09]",
+  glass: "bk-glass",
+  surface: "bg-[#161618] border border-white/[0.09]",
 };
 
 export function Card({
@@ -19,7 +19,7 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={`rounded-[16px] ${variantMap[variant]} ${className}`}
+      className={`rounded-[20px] ${variantMap[variant]} ${className}`}
       {...props}
     >
       {children}

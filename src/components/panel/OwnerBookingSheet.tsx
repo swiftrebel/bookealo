@@ -166,9 +166,8 @@ export function OwnerBookingSheet({
           ? "Registra una reserva directa (quedará confirmada de inmediato)."
           : "Marca una franja como ocupada para que no pueda reservarse."
       }
-      accentColor={mode === "manual" ? "#ff3b6b" : "#7c3aed"}
       headerExtra={
-        <div className="mb-2">
+        <div className="mb-2.5">
           <Badge tone={mode === "manual" ? "confirmed" : "blocked"}>
             {mode === "manual" ? "Confirmada directa" : "Bloqueo de horario"}
           </Badge>
@@ -180,12 +179,12 @@ export function OwnerBookingSheet({
             <div className="min-w-0">
               {selectedService && (
                 <>
-                  <p className="truncate text-sm font-bold text-white">
+                  <p className="truncate text-[16px] font-semibold text-[#f5f5f7] tabular-nums">
                     {mode === "manual"
                       ? formatUSD(selectedService.price)
                       : selectedService.name}
                   </p>
-                  <p className="truncate text-xs text-[#a99ec4]">
+                  <p className="truncate text-[12px] text-[#86868b] tabular-nums">
                     {selectedSlot
                       ? `${selectedSlot.startTime} – ${selectedSlot.endTime}`
                       : "Elige una franja libre"}
@@ -206,34 +205,38 @@ export function OwnerBookingSheet({
       }
     >
       {activeServices.length === 0 ? (
-        <Card className="mt-4 p-6 text-center">
-          <p className="font-bold text-white">No tienes servicios activos</p>
-          <p className="mt-1.5 text-sm text-[#a99ec4]">
+        <Card variant="surface" className="mt-5 p-6 text-center">
+          <p className="text-[15px] font-semibold text-[#f5f5f7]">
+            No tienes servicios activos
+          </p>
+          <p className="mt-1.5 text-[13px] text-[#86868b]">
             Activa o crea al menos un servicio para poder registrar reservas
             manuales o bloquear horarios.
           </p>
           <Link
             href="/panel/servicios"
             onClick={onClose}
-            className="bk-grad-shadow mt-4 inline-flex h-10 items-center justify-center rounded-xl px-5 text-sm font-bold text-white"
+            className="bk-cta mt-5 h-10 px-5 text-[14px]"
           >
             Ir a Servicios
           </Link>
         </Card>
       ) : (
-        <div className="space-y-6 pt-3">
+        <div className="space-y-7 pt-5">
           {submitError && (
             <div
               role="alert"
-              className="rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7a9b]"
+              className="rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
             >
               {submitError}
             </div>
           )}
 
           {/* 1. Selector de servicio */}
-          <div className="space-y-2.5">
-            <h4 className="text-base font-bold text-white">1. Servicio</h4>
+          <div className="space-y-3">
+            <h4 className="text-[15px] font-semibold text-[#f5f5f7]">
+              1. Servicio
+            </h4>
             <div className="grid gap-2">
               {activeServices.map((service) => {
                 const active = service.id === selectedServiceId;
@@ -246,20 +249,22 @@ export function OwnerBookingSheet({
                       setSelectedSlot(null);
                       setSubmitError(null);
                     }}
-                    className={`flex cursor-pointer items-center justify-between rounded-[14px] border px-4 py-3 text-left transition ${
+                    className={`bk-tx flex cursor-pointer items-center justify-between rounded-[14px] border px-4 py-3.5 text-left ${
                       active
-                        ? "border-[#ff3b6b] bg-[#ff3b6b]/15 text-white"
-                        : "border-white/10 bg-white/[0.06] text-white/90 hover:bg-white/[0.11]"
+                        ? "border-white/30 bg-[#222225] text-[#f5f5f7]"
+                        : "border-white/[0.08] bg-[#161618] text-[#f5f5f7]/85 hover:bg-[#1f1f22]"
                     }`}
                   >
                     <div>
-                      <p className="text-sm font-bold">{service.name}</p>
-                      <p className="text-xs text-[#a99ec4]">
+                      <p className="text-[14px] font-semibold text-[#f5f5f7]">
+                        {service.name}
+                      </p>
+                      <p className="mt-0.5 text-[12px] text-[#86868b]">
                         {service.slot_duration_minutes} min ·{" "}
                         {service.is_roofed ? "Techado" : "Aire libre"}
                       </p>
                     </div>
-                    <span className="text-sm font-extrabold">
+                    <span className="text-[14px] font-semibold text-[#f5f5f7] tabular-nums">
                       {formatUSD(service.price)}
                     </span>
                   </button>
@@ -269,12 +274,16 @@ export function OwnerBookingSheet({
           </div>
 
           {/* 2. Selector de fecha */}
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-base font-bold text-white">2. Fecha</h4>
-              <span className="text-xs text-[#a99ec4]">Próximos 14 días</span>
+              <h4 className="text-[15px] font-semibold text-[#f5f5f7]">
+                2. Fecha
+              </h4>
+              <span className="text-[12px] text-[#86868b]">
+                Próximos 14 días
+              </span>
             </div>
-            <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1">
+            <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto px-6 pb-1">
               {days.map((day) => {
                 const active = selectedDate === day.dateStr;
                 return (
@@ -286,16 +295,20 @@ export function OwnerBookingSheet({
                       setSelectedSlot(null);
                       setSubmitError(null);
                     }}
-                    className={`w-[58px] shrink-0 cursor-pointer rounded-[14px] border py-2.5 text-center transition ${
+                    className={`bk-tx w-[58px] shrink-0 cursor-pointer rounded-[14px] border py-2.5 text-center ${
                       active
-                        ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.3)]"
-                        : "border-white/10 bg-white/[0.07] text-[#a99ec4] hover:bg-white/[0.12]"
+                        ? "border-transparent bg-[#f5f5f7] text-black"
+                        : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
                     }`}
                   >
-                    <span className="block text-[11px] font-semibold capitalize">
+                    <span className="block text-[11px] font-medium capitalize">
                       {day.isToday ? "Hoy" : day.weekdayShort}
                     </span>
-                    <strong className="mt-0.5 block text-xl font-extrabold text-white">
+                    <strong
+                      className={`mt-0.5 block text-[19px] font-semibold tabular-nums ${
+                        active ? "text-black" : "text-[#f5f5f7]"
+                      }`}
+                    >
                       {day.dayNumber}
                     </strong>
                   </button>
@@ -305,12 +318,12 @@ export function OwnerBookingSheet({
           </div>
 
           {/* 3. Selector de franja horaria libre */}
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-base font-bold text-white">
+              <h4 className="text-[15px] font-semibold text-[#f5f5f7]">
                 3. Franja disponible
               </h4>
-              <span className="text-xs text-[#a99ec4]">Hora de Panamá</span>
+              <span className="text-[12px] text-[#86868b]">Hora de Panamá</span>
             </div>
 
             {loadingSlots ? (
@@ -318,13 +331,13 @@ export function OwnerBookingSheet({
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
-                    className="h-11 animate-pulse rounded-[12px] bg-white/[0.08]"
+                    className="h-11 animate-pulse rounded-[12px] bg-[#1a1a1c]"
                   />
                 ))}
               </div>
             ) : slotsError ? (
-              <Card className="border-[#ff3b6b]/35 bg-[#ff3b6b]/10 p-4">
-                <p className="text-sm font-semibold text-[#ff7a9b]">
+              <Card className="border-[#ff6961]/25 bg-[rgba(255,69,58,0.1)] p-4">
+                <p className="text-[13px] font-medium text-[#ff6961]">
                   {slotsError}
                 </p>
                 <Button
@@ -337,19 +350,21 @@ export function OwnerBookingSheet({
                 </Button>
               </Card>
             ) : availability?.isClosed ? (
-              <Card className="p-5 text-center">
-                <p className="text-sm font-bold text-white">Cerrado este día</p>
-                <p className="mt-1 text-xs text-[#a99ec4]">
+              <Card variant="surface" className="p-5 text-center">
+                <p className="text-[14px] font-semibold text-[#f5f5f7]">
+                  Cerrado este día
+                </p>
+                <p className="mt-1 text-[12px] text-[#86868b]">
                   No hay horario abierto para{" "}
                   <span className="capitalize">{readableDate}</span>.
                 </p>
               </Card>
             ) : availability && availability.slots.length === 0 ? (
-              <Card className="p-5 text-center">
-                <p className="text-sm font-bold text-white">
+              <Card variant="surface" className="p-5 text-center">
+                <p className="text-[14px] font-semibold text-[#f5f5f7]">
                   Sin franjas libres
                 </p>
-                <p className="mt-1 text-xs text-[#a99ec4]">
+                <p className="mt-1 text-[12px] text-[#86868b]">
                   Todas las franjas de este día están ocupadas o ya pasaron.
                 </p>
               </Card>
@@ -365,10 +380,10 @@ export function OwnerBookingSheet({
                         setSelectedSlot(slot);
                         setSubmitError(null);
                       }}
-                      className={`cursor-pointer rounded-[12px] border py-2.5 text-center text-sm font-bold transition active:scale-[0.96] ${
+                      className={`bk-tx cursor-pointer rounded-[12px] border py-2.5 text-center text-[14px] font-medium tabular-nums ${
                         active
-                          ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.3)]"
-                          : "border-white/10 bg-white/[0.07] text-white hover:bg-white/[0.13]"
+                          ? "border-transparent bg-[#1d7f45] text-white"
+                          : "border-white/[0.09] bg-[#1a1a1c] text-[#f5f5f7] hover:border-white/20 hover:bg-[#222225]"
                       }`}
                     >
                       {slot.startTime}
@@ -381,8 +396,8 @@ export function OwnerBookingSheet({
 
           {/* 4. Datos del cliente (solo para reserva manual) */}
           {mode === "manual" && (
-            <div className="space-y-3 border-t border-white/10 pt-4">
-              <h4 className="text-base font-bold text-white">
+            <div className="space-y-4 border-t border-white/10 pt-5">
+              <h4 className="text-[15px] font-semibold text-[#f5f5f7]">
                 4. Datos del cliente
               </h4>
               <Input

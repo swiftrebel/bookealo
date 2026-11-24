@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { OwnerBookingsDashboard } from "@/components/panel/OwnerBookingsDashboard";
 import { Badge } from "@/components/ui/Badge";
+import { CalendarIcon } from "@/components/ui/Icons";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { requireRole } from "@/lib/auth";
 import { getNextPanamaDays } from "@/lib/dates";
@@ -44,7 +45,7 @@ export default async function PanelPage() {
           subtitle={`Bienvenido, ${profile.full_name || user.email}`}
         />
         <EmptyState
-          icon="🏟️"
+          icon={<CalendarIcon className="h-5 w-5" />}
           title="Aún no tienes un negocio asignado"
           description="Tu cuenta tiene rol de dueño de negocio, pero todavía no tiene un negocio vinculado. Pide al administrador que te asigne tu negocio desde Supabase."
         />

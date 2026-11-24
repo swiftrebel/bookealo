@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { OwnerSchedulesManager } from "@/components/panel/OwnerSchedulesManager";
+import { ClockIcon } from "@/components/ui/Icons";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { requireRole } from "@/lib/auth";
 import { translateError } from "@/lib/errors";
@@ -51,7 +52,7 @@ export default async function PanelHorariosPage({
           subtitle="Configura los días y horas de apertura para cada servicio."
         />
         <EmptyState
-          icon="🏟️"
+          icon={<ClockIcon className="h-5 w-5" />}
           title="Aún no tienes un negocio asignado"
           description="Cuando el administrador asigne un negocio a tu cuenta, podrás configurar los horarios de tus servicios aquí."
         />
