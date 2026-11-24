@@ -29,10 +29,12 @@ export default async function PerfilPage() {
         email={user.email ?? ""}
       />
 
-      <Card className="flex max-w-xl flex-wrap items-center justify-between gap-4 p-5">
+      <Card className="flex max-w-xl flex-wrap items-center justify-between gap-4 p-6">
         <div>
-          <p className="text-sm font-bold text-white">Cerrar sesión</p>
-          <p className="text-xs text-[#a99ec4]">
+          <p className="text-[15px] font-semibold text-[#f5f5f7]">
+            Cerrar sesión
+          </p>
+          <p className="mt-0.5 text-[13px] text-[#86868b]">
             Sal de tu cuenta en este dispositivo.
           </p>
         </div>

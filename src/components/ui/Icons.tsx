@@ -4,7 +4,16 @@ type IconProps = SVGProps<SVGSVGElement>;
 
 export function HomeIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
       <path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
     </svg>
   );
@@ -12,35 +21,78 @@ export function HomeIcon(props: IconProps) {
 
 export function BookingsIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <path d="M12 11h4" />
+      <path d="M12 16h4" />
+      <path d="M8 11h.01" />
+      <path d="M8 16h.01" />
     </svg>
   );
 }
 
 export function SearchIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z" />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-4-4" />
     </svg>
   );
 }
 
 export function GridIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <rect x="3" y="3" width="8" height="8" rx="2.5" />
-      <rect x="13" y="3" width="8" height="8" rx="2.5" />
-      <rect x="3" y="13" width="8" height="8" rx="2.5" />
-      <rect x="13" y="13" width="8" height="8" rx="2.5" />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <rect x="3" y="3" width="7.5" height="7.5" rx="2" />
+      <rect x="13.5" y="3" width="7.5" height="7.5" rx="2" />
+      <rect x="3" y="13.5" width="7.5" height="7.5" rx="2" />
+      <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" />
     </svg>
   );
 }
 
 export function UserIcon(props: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M12 12a4.5 4.5 0 1 0-4.5-4.5A4.5 4.5 0 0 0 12 12zm0 2c-4.14 0-7.5 2.24-7.5 5v1a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-1c0-2.76-3.36-5-7.5-5z" />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
     </svg>
   );
 }
@@ -51,7 +103,7 @@ export function ClockIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -69,7 +121,7 @@ export function CalendarIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -87,7 +139,7 @@ export function MapPinIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -105,7 +157,7 @@ export function PhoneIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -122,7 +174,7 @@ export function LogOutIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -141,7 +193,7 @@ export function LogInIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -160,7 +212,7 @@ export function ShieldIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -177,7 +229,7 @@ export function CloseIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2.2}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -195,7 +247,7 @@ export function CheckIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2.4}
+      strokeWidth={2.2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -212,7 +264,7 @@ export function PlusIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2.2}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -230,7 +282,7 @@ export function LockIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -254,9 +306,8 @@ export function ExternalLinkIcon(props: IconProps) {
       aria-hidden="true"
       {...props}
     >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
+      <path d="M7 17L17 7" />
+      <path d="M8 7h9v9" />
     </svg>
   );
 }
@@ -267,13 +318,30 @@ export function ChevronLeftIcon(props: IconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2.2}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
       {...props}
     >
-      <polyline points="15 18 9 12 15 6" />
+      <path d="M15 6l-6 6 6 6" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M9 6l6 6-6 6" />
     </svg>
   );
 }

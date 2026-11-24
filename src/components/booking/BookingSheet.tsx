@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createCustomerBookingAction } from "@/actions/bookings";
-import { getGradientForSeed } from "@/components/ui/Artwork";
 import { Badge, BookingStatusBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -167,7 +166,6 @@ export function BookingSheet({
     return () => controller.abort();
   }, [service.id, selectedDate, reloadCounter, isAuthenticated]);
 
-  const [accentColor] = getGradientForSeed(business.id);
   const readableDate = selectedDate
     ? formatPanamaDateLong(buildPanamaISO(selectedDate, "12:00:00"))
     : "";
@@ -230,24 +228,23 @@ export function BookingSheet({
       onClose={submitting ? () => {} : onClose}
       title={service.name}
       subtitle={`${business.name}${business.zone ? ` · ${business.zone}` : ""}`}
-      accentColor={accentColor}
       headerExtra={
-        <div className="mb-2 flex flex-wrap items-center gap-2">
+        <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
           <Badge tone={service.is_roofed ? "info" : "neutral"}>
             {service.is_roofed ? "Techado" : "Aire libre"}
           </Badge>
           <Badge tone="neutral">{service.slot_duration_minutes} min</Badge>
-          <Badge tone="accent">{formatUSD(service.price)}</Badge>
+          <Badge tone="confirmed">{formatUSD(service.price)}</Badge>
         </div>
       }
       footer={
         step === "select" ? (
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xl font-extrabold text-white">
+              <p className="text-[20px] font-semibold tracking-[-0.02em] text-[#f5f5f7] tabular-nums">
                 {formatUSD(service.price)}
               </p>
-              <p className="text-xs text-[#a99ec4]">
+              <p className="text-[12px] text-[#86868b] tabular-nums">
                 {selectedSlot
                   ? `${selectedSlot.startTime} – ${selectedSlot.endTime}`
                   : `Turno de ${service.slot_duration_minutes} min`}
@@ -265,7 +262,7 @@ export function BookingSheet({
             </Button>
           </div>
         ) : step === "summary" ? (
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             {isAuthenticated ? (
               <Button
                 fullWidth
@@ -286,11 +283,11 @@ export function BookingSheet({
                 >
                   Iniciar sesión para reservar
                 </Button>
-                <p className="text-center text-xs text-[#a99ec4]">
+                <p className="text-center text-[13px] text-[#86868b]">
                   ¿No tienes cuenta?{" "}
                   <Link
                     href={`/registro?next=${encodeURIComponent(returnPath)}`}
-                    className="font-bold text-[#ff5e7e] hover:text-white"
+                    className="bk-ul font-medium"
                   >
                     Regístrate aquí
                   </Link>
@@ -299,11 +296,11 @@ export function BookingSheet({
             )}
           </div>
         ) : (
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex flex-col gap-2.5 sm:flex-row">
             <Link
               href="/mis-reservas"
               onClick={onClose}
-              className="bk-grad-shadow inline-flex h-12 flex-1 items-center justify-center rounded-[14px] px-5 text-sm font-bold text-white transition hover:brightness-110"
+              className="bk-cta h-12 flex-1 px-6 text-[15px]"
             >
               Ver mis reservas
             </Link>
@@ -315,26 +312,28 @@ export function BookingSheet({
       }
     >
       {step === "select" && (
-        <div className="space-y-6 pt-3">
+        <div className="space-y-7 pt-5">
           {bookingError && (
             <div
               role="alert"
-              className="rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7a9b]"
+              className="rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
             >
               {bookingError}
             </div>
           )}
 
-          {/* Selector de los próximos 14 días (America/Panama), fiel a .days */}
-          <div className="space-y-2.5">
+          {/* Selector de los próximos 14 días (America/Panama) */}
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-lg font-bold tracking-[-0.02em] text-white">
+              <h4 className="text-[16px] font-semibold tracking-[-0.015em] text-[#f5f5f7]">
                 Elige una fecha
               </h4>
-              <span className="text-xs text-[#a99ec4]">Próximos 14 días</span>
+              <span className="text-[12px] text-[#86868b]">
+                Próximos 14 días
+              </span>
             </div>
 
-            <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1">
+            <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto px-6 pb-1">
               {days.map((day) => {
                 const active = selectedDate === day.dateStr;
                 return (
@@ -342,16 +341,20 @@ export function BookingSheet({
                     key={day.dateStr}
                     type="button"
                     onClick={() => handleSelectDate(day.dateStr)}
-                    className={`w-[58px] shrink-0 cursor-pointer rounded-[14px] border py-2.5 text-center transition ${
+                    className={`bk-tx w-[58px] shrink-0 cursor-pointer rounded-[14px] border py-2.5 text-center ${
                       active
-                        ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.3)]"
-                        : "border-white/10 bg-white/[0.07] text-[#a99ec4] hover:bg-white/[0.12]"
+                        ? "border-transparent bg-[#f5f5f7] text-black"
+                        : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
                     }`}
                   >
-                    <span className="block text-[11px] font-semibold capitalize">
+                    <span className="block text-[11px] font-medium capitalize">
                       {day.isToday ? "Hoy" : day.weekdayShort}
                     </span>
-                    <strong className="mt-0.5 block text-xl font-extrabold text-white">
+                    <strong
+                      className={`mt-0.5 block text-[19px] font-semibold tabular-nums ${
+                        active ? "text-black" : "text-[#f5f5f7]"
+                      }`}
+                    >
                       {day.dayNumber}
                     </strong>
                   </button>
@@ -360,13 +363,13 @@ export function BookingSheet({
             </div>
           </div>
 
-          {/* Franjas disponibles (solo libres), fiel a .slots */}
+          {/* Franjas disponibles (solo libres) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-lg font-bold tracking-[-0.02em] text-white">
+              <h4 className="text-[16px] font-semibold tracking-[-0.015em] text-[#f5f5f7]">
                 Horarios disponibles
               </h4>
-              <span className="text-xs text-[#a99ec4]">Hora de Panamá</span>
+              <span className="text-[12px] text-[#86868b]">Hora de Panamá</span>
             </div>
 
             {loadingSlots ? (
@@ -374,13 +377,13 @@ export function BookingSheet({
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
-                    className="h-12 animate-pulse rounded-[12px] bg-white/[0.08]"
+                    className="h-12 animate-pulse rounded-[12px] bg-[#1a1a1c]"
                   />
                 ))}
               </div>
             ) : slotsError ? (
-              <Card className="border-[#ff3b6b]/35 bg-[#ff3b6b]/10 p-4">
-                <p className="text-sm font-semibold text-[#ff7a9b]">
+              <Card className="border-[#ff6961]/25 bg-[rgba(255,69,58,0.1)] p-4">
+                <p className="text-[13px] font-medium text-[#ff6961]">
                   {slotsError}
                 </p>
                 <Button
@@ -393,20 +396,22 @@ export function BookingSheet({
                 </Button>
               </Card>
             ) : availability?.isClosed ? (
-              <Card className="p-6 text-center">
-                <p className="font-bold text-white">Cerrado este día</p>
-                <p className="mt-1 text-xs text-[#a99ec4]">
+              <Card variant="surface" className="p-6 text-center">
+                <p className="text-[15px] font-semibold text-[#f5f5f7]">
+                  Cerrado este día
+                </p>
+                <p className="mt-1.5 text-[13px] text-[#86868b]">
                   Este servicio no tiene atención el{" "}
                   <span className="capitalize">{readableDate}</span>. Elige otra
                   fecha.
                 </p>
               </Card>
             ) : availability && availability.slots.length === 0 ? (
-              <Card className="p-6 text-center">
-                <p className="font-bold text-white">
+              <Card variant="surface" className="p-6 text-center">
+                <p className="text-[15px] font-semibold text-[#f5f5f7]">
                   Sin horarios disponibles
                 </p>
-                <p className="mt-1 text-xs text-[#a99ec4]">
+                <p className="mt-1.5 text-[13px] text-[#86868b]">
                   No quedan franjas libres para esta fecha. Prueba seleccionando
                   otro día.
                 </p>
@@ -423,10 +428,10 @@ export function BookingSheet({
                         setSelectedSlot(slot);
                         setBookingError(null);
                       }}
-                      className={`cursor-pointer rounded-[12px] border py-3 text-center text-sm font-bold transition active:scale-[0.96] ${
+                      className={`bk-tx cursor-pointer rounded-[12px] border py-3 text-center text-[14px] font-medium tabular-nums ${
                         active
-                          ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.3)]"
-                          : "border-white/10 bg-white/[0.07] text-white hover:bg-white/[0.13]"
+                          ? "border-transparent bg-[#1d7f45] text-white"
+                          : "border-white/[0.09] bg-[#1a1a1c] text-[#f5f5f7] hover:border-white/20 hover:bg-[#222225]"
                       }`}
                     >
                       {slot.startTime}
@@ -440,7 +445,7 @@ export function BookingSheet({
       )}
 
       {step === "summary" && selectedSlot && (
-        <div className="space-y-5 pt-3">
+        <div className="space-y-6 pt-5">
           <button
             type="button"
             disabled={submitting}
@@ -448,17 +453,17 @@ export function BookingSheet({
               setBookingError(null);
               setStep("select");
             }}
-            className="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-[#ff5e7e] transition hover:text-white disabled:opacity-50"
+            className="bk-tx inline-flex cursor-pointer items-center gap-1 text-[14px] text-[#86868b] hover:text-[#f5f5f7] disabled:opacity-50"
           >
             <ChevronLeftIcon className="h-4 w-4" />
             Cambiar fecha u horario
           </button>
 
           <div>
-            <h4 className="text-xl font-extrabold tracking-[-0.02em] text-white">
+            <h4 className="text-[22px] font-semibold tracking-[-0.025em] text-[#f5f5f7]">
               Resumen de tu reserva
             </h4>
-            <p className="mt-1 text-xs text-[#a99ec4]">
+            <p className="mt-1 text-[13px] text-[#86868b]">
               Revisa los detalles antes de enviar tu solicitud.
             </p>
           </div>
@@ -466,101 +471,108 @@ export function BookingSheet({
           {bookingError && (
             <div
               role="alert"
-              className="rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7a9b]"
+              className="rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
             >
               {bookingError}
             </div>
           )}
 
-          <Card className="space-y-3.5 p-4 text-sm">
-            <div className="flex items-start justify-between gap-3">
-              <span className="text-[#a99ec4]">Negocio</span>
-              <span className="text-right font-semibold text-white">
+          <Card variant="surface" className="divide-y divide-white/[0.08] px-4 text-[14px]">
+            <div className="flex items-start justify-between gap-3 py-3.5">
+              <span className="text-[#86868b]">Negocio</span>
+              <span className="text-right font-medium text-[#f5f5f7]">
                 {business.name}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-3">
-              <span className="text-[#a99ec4]">Servicio</span>
-              <span className="text-right font-semibold text-white">
+            <div className="flex items-start justify-between gap-3 py-3.5">
+              <span className="text-[#86868b]">Servicio</span>
+              <span className="text-right font-medium text-[#f5f5f7]">
                 {service.name}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-3">
-              <span className="inline-flex items-center gap-1.5 text-[#a99ec4]">
+            <div className="flex items-start justify-between gap-3 py-3.5">
+              <span className="inline-flex items-center gap-1.5 text-[#86868b]">
                 <CalendarIcon className="h-4 w-4" />
                 Fecha
               </span>
-              <span className="text-right font-semibold capitalize text-white">
+              <span className="text-right font-medium capitalize text-[#f5f5f7]">
                 {readableDate}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-3">
-              <span className="inline-flex items-center gap-1.5 text-[#a99ec4]">
+            <div className="flex items-start justify-between gap-3 py-3.5">
+              <span className="inline-flex items-center gap-1.5 text-[#86868b]">
                 <ClockIcon className="h-4 w-4" />
                 Horario
               </span>
-              <span className="text-right font-semibold text-white">
+              <span className="text-right font-medium text-[#f5f5f7] tabular-nums">
                 {formatPanamaTime(selectedSlot.startIso)} –{" "}
                 {formatPanamaTime(selectedSlot.endIso)} (
                 {service.slot_duration_minutes} min)
               </span>
             </div>
-            <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-3">
-              <span className="font-semibold text-white">
+            <div className="flex items-center justify-between gap-3 py-4">
+              <span className="font-medium text-[#f5f5f7]">
                 Total a pagar en el lugar
               </span>
-              <span className="text-xl font-extrabold text-white">
+              <span className="text-[20px] font-semibold tracking-[-0.02em] text-[#f5f5f7] tabular-nums">
                 {formatUSD(service.price)}
               </span>
             </div>
           </Card>
 
-          <Card className="space-y-1.5 p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#a99ec4]">
+          <div className="border-t border-white/[0.09] pt-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-[rgba(245,245,247,0.44)]">
               Política de cancelación
             </p>
-            <p className="text-xs leading-relaxed text-white/85">
+            <p className="mt-2 text-[13px] leading-relaxed text-[#86868b]">
               {business.cancellation_policy?.trim() ||
                 "Puedes cancelar desde Mis reservas. Para cambios de última hora contacta directamente al negocio."}
             </p>
-          </Card>
+          </div>
 
-          <p className="text-xs text-[#a99ec4]">
-            Tu reserva quedará en estado <strong>Pendiente</strong> hasta que el
-            negocio la confirme.
+          <p className="text-[13px] text-[#86868b]">
+            Tu reserva quedará en estado{" "}
+            <strong className="font-medium text-[#f5f5f7]">Pendiente</strong>{" "}
+            hasta que el negocio la confirme.
           </p>
         </div>
       )}
 
       {step === "confirmed" && selectedSlot && (
-        <div className="space-y-5 pt-6 text-center">
-          <div className="bk-grad-shadow mx-auto grid h-16 w-16 place-items-center rounded-full text-white">
-            <CheckIcon className="h-8 w-8" />
+        <div className="space-y-6 pt-8 text-center">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#1d7f45] text-white">
+            <CheckIcon className="h-7 w-7" />
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-2xl font-extrabold leading-tight tracking-[-0.02em] text-white">
+            <h4 className="text-[24px] font-semibold leading-[1.15] tracking-[-0.025em] text-[#f5f5f7]">
               Solicitud enviada, esperando confirmación del negocio
             </h4>
-            <p className="text-sm text-[#a99ec4]">
+            <p className="text-[14px] leading-relaxed text-[#86868b]">
               Puedes consultar el estado o cancelar tu solicitud en cualquier
-              momento desde <strong>Mis reservas</strong>.
+              momento desde{" "}
+              <strong className="font-medium text-[#f5f5f7]">
+                Mis reservas
+              </strong>
+              .
             </p>
           </div>
 
-          <Card className="space-y-2.5 p-4 text-left text-sm">
+          <Card variant="surface" className="space-y-2 p-5 text-left text-[14px]">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-bold text-white">{service.name}</span>
+              <span className="font-semibold text-[#f5f5f7]">
+                {service.name}
+              </span>
               <BookingStatusBadge status="pending" />
             </div>
-            <p className="text-xs text-[#a99ec4]">{business.name}</p>
-            <p className="text-xs capitalize text-white/90">
+            <p className="text-[13px] text-[#86868b]">{business.name}</p>
+            <p className="text-[13px] capitalize text-[#f5f5f7]/80 tabular-nums">
               {readableDate} · {formatPanamaTime(selectedSlot.startIso)} –{" "}
               {formatPanamaTime(selectedSlot.endIso)}
             </p>
-            <p className="pt-1 text-base font-extrabold text-white">
+            <p className="pt-2 text-[17px] font-semibold text-[#f5f5f7] tabular-nums">
               {formatUSD(confirmedPrice ?? service.price)}{" "}
-              <span className="text-xs font-normal text-[#a99ec4]">
+              <span className="text-[12px] font-normal text-[#86868b]">
                 (pago en el lugar)
               </span>
             </p>

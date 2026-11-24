@@ -11,8 +11,7 @@ import {
 } from "@/actions/services";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { ClockIcon, PlusIcon } from "@/components/ui/Icons";
+import { ClockIcon, GridIcon, PlusIcon } from "@/components/ui/Icons";
 import { Input } from "@/components/ui/Input";
 import { ConfirmModal } from "@/components/ui/Modal";
 import { Sheet } from "@/components/ui/Sheet";
@@ -108,11 +107,11 @@ function ServiceFormSheet({
         </div>
       }
     >
-      <form id="service-form" onSubmit={handleSubmit} className="space-y-5 pt-3">
+      <form id="service-form" onSubmit={handleSubmit} className="space-y-5 pt-5">
         {error && (
           <div
             role="alert"
-            className="rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7a9b]"
+            className="rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
           >
             {error}
           </div>
@@ -140,7 +139,7 @@ function ServiceFormSheet({
           required
         />
 
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <Input
             id="service-duration"
             type="number"
@@ -152,16 +151,16 @@ function ServiceFormSheet({
             onChange={(e) => setDuration(e.target.value)}
             required
           />
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {QUICK_DURATIONS.map((mins) => (
               <button
                 key={mins}
                 type="button"
                 onClick={() => setDuration(String(mins))}
-                className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                className={`bk-tx h-[30px] cursor-pointer rounded-full border px-3 text-[12px] font-medium tabular-nums ${
                   Number(duration) === mins
-                    ? "bk-grad border-transparent text-white"
-                    : "border-white/10 bg-white/[0.06] text-[#a99ec4] hover:text-white"
+                    ? "border-transparent bg-[#f5f5f7] text-black"
+                    : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:text-[#f5f5f7]"
                 }`}
               >
                 {mins} min
@@ -170,11 +169,13 @@ function ServiceFormSheet({
           </div>
         </div>
 
-        <div className="space-y-2.5">
-          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-[14px] border border-white/10 bg-white/[0.06] px-4 py-3.5">
+        <div className="space-y-2.5 pt-1">
+          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-[14px] border border-white/[0.08] bg-[#161618] px-4 py-3.5">
             <div>
-              <p className="text-sm font-bold text-white">Espacio techado</p>
-              <p className="text-xs text-[#a99ec4]">
+              <p className="text-[14px] font-medium text-[#f5f5f7]">
+                Espacio techado
+              </p>
+              <p className="mt-0.5 text-[12px] text-[#86868b]">
                 Muestra la etiqueta “Techado” en la página pública.
               </p>
             </div>
@@ -182,14 +183,16 @@ function ServiceFormSheet({
               type="checkbox"
               checked={isRoofed}
               onChange={(e) => setIsRoofed(e.target.checked)}
-              className="h-5 w-5 accent-[#ff3b6b]"
+              className="h-5 w-5 accent-[#1d7f45]"
             />
           </label>
 
-          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-[14px] border border-white/10 bg-white/[0.06] px-4 py-3.5">
+          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-[14px] border border-white/[0.08] bg-[#161618] px-4 py-3.5">
             <div>
-              <p className="text-sm font-bold text-white">Servicio activo</p>
-              <p className="text-xs text-[#a99ec4]">
+              <p className="text-[14px] font-medium text-[#f5f5f7]">
+                Servicio activo
+              </p>
+              <p className="mt-0.5 text-[12px] text-[#86868b]">
                 Solo los servicios activos aparecen visibles para reservar.
               </p>
             </div>
@@ -197,7 +200,7 @@ function ServiceFormSheet({
               type="checkbox"
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
-              className="h-5 w-5 accent-[#ff3b6b]"
+              className="h-5 w-5 accent-[#1d7f45]"
             />
           </label>
         </div>
@@ -264,9 +267,9 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[#a99ec4]">
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-[14px] text-[#86868b] tabular-nums">
           {services.length}{" "}
           {services.length === 1
             ? "servicio configurado"
@@ -281,10 +284,10 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
       {feedback && (
         <div
           role={feedback.type === "error" ? "alert" : "status"}
-          className={`rounded-[14px] border px-4 py-3 text-sm font-medium ${
+          className={`rounded-[14px] border px-4 py-3 text-[14px] font-medium ${
             feedback.type === "error"
-              ? "border-[#ff3b6b]/40 bg-[#ff3b6b]/15 text-[#ff7a9b]"
-              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+              ? "border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] text-[#ff6961]"
+              : "border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] text-[#34c470]"
           }`}
         >
           {feedback.message}
@@ -293,7 +296,7 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
 
       {services.length === 0 ? (
         <EmptyState
-          icon="⚽"
+          icon={<GridIcon className="h-5 w-5" />}
           title="Todavía no tienes servicios"
           description="Crea tu primera cancha o servicio para definir horarios y empezar a recibir reservas."
           action={
@@ -306,18 +309,23 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
           }
         />
       ) : (
-        <div className="grid gap-4">
+        <div className="border-t border-white/10">
           {services.map((service) => {
             const isBusy = busyId === service.id;
             return (
-              <Card key={service.id} className="p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <article
+                key={service.id}
+                className="border-b border-white/10 py-6"
+              >
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-lg font-bold text-white">
+                      <h3 className="text-[20px] font-semibold tracking-[-0.02em] text-[#f5f5f7]">
                         {service.name}
                       </h3>
-                      <Badge tone={service.is_active ? "confirmed" : "cancelled"}>
+                      <Badge
+                        tone={service.is_active ? "confirmed" : "cancelled"}
+                      >
                         {service.is_active ? "Activo" : "Inactivo"}
                       </Badge>
                       <Badge tone={service.is_roofed ? "info" : "neutral"}>
@@ -325,24 +333,24 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
                       </Badge>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#a99ec4]">
-                      <span className="font-extrabold text-white">
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[14px] text-[#86868b]">
+                      <span className="font-semibold text-[#f5f5f7] tabular-nums">
                         {formatUSD(service.price)}
                       </span>
-                      <span className="inline-flex items-center gap-1">
-                        <ClockIcon className="h-4 w-4 text-[#ff5e7e]" />
+                      <span className="inline-flex items-center gap-1.5">
+                        <ClockIcon className="h-3.5 w-3.5" />
                         {service.slot_duration_minutes} min por turno
                       </span>
                       <Link
                         href={`/panel/horarios?servicio=${encodeURIComponent(service.id)}`}
-                        className="font-semibold text-[#ff5e7e] transition hover:text-white"
+                        className="bk-ul text-[14px]"
                       >
                         Editar horarios →
                       </Link>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 border-t border-white/10 pt-3 sm:border-t-0 sm:pt-0">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Button
                       variant="secondary"
                       size="sm"
@@ -370,7 +378,7 @@ export function OwnerServicesManager({ services }: OwnerServicesManagerProps) {
                     </Button>
                   </div>
                 </div>
-              </Card>
+              </article>
             );
           })}
         </div>

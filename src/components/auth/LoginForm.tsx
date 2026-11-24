@@ -10,25 +10,31 @@ import { Input } from "@/components/ui/Input";
 const initialState: AuthActionState = {};
 
 export function LoginForm({ nextPath }: { nextPath: string | null }) {
-  const [state, formAction, isPending] = useActionState(loginAction, initialState);
+  const [state, formAction, isPending] = useActionState(
+    loginAction,
+    initialState,
+  );
 
   const registerHref = nextPath
     ? `/registro?next=${encodeURIComponent(nextPath)}`
     : "/registro";
 
   return (
-    <Card variant="surface" className="rounded-[24px] p-6 sm:p-7">
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-[-0.03em] text-white">
+    <Card className="bk-rise rounded-[24px] p-7 sm:p-8">
+      <div className="mb-7">
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[rgba(245,245,247,0.44)]">
+          Acceso
+        </p>
+        <h1 className="text-[30px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#f5f5f7]">
           Iniciar sesión
         </h1>
-        <p className="mt-1.5 text-sm text-[#a99ec4]">
+        <p className="mt-2 text-[14px] leading-relaxed text-[#86868b]">
           Accede a tu cuenta de Bookealo para reservar o gestionar tu negocio.
         </p>
       </div>
 
       {nextPath && (
-        <div className="mb-5 rounded-[14px] border border-white/10 bg-white/[0.06] px-4 py-3 text-xs text-[#d9d0ee]">
+        <div className="mb-5 rounded-[14px] border border-white/10 bg-[#1a1a1c] px-4 py-3 text-[13px] text-[#f5f5f7]/80">
           Inicia sesión para continuar con tu reserva.
         </div>
       )}
@@ -36,7 +42,7 @@ export function LoginForm({ nextPath }: { nextPath: string | null }) {
       {state.error && (
         <div
           role="alert"
-          className="mb-5 rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7092]"
+          className="mb-5 rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
         >
           {state.error}
         </div>
@@ -65,19 +71,16 @@ export function LoginForm({ nextPath }: { nextPath: string | null }) {
           required
         />
 
-        <div className="pt-2">
+        <div className="pt-3">
           <Button type="submit" fullWidth size="lg" loading={isPending}>
             {isPending ? "Ingresando..." : "Iniciar sesión"}
           </Button>
         </div>
       </form>
 
-      <p className="mt-6 text-center text-sm text-[#a99ec4]">
+      <p className="mt-7 text-center text-[14px] text-[#86868b]">
         ¿Aún no tienes cuenta?{" "}
-        <Link
-          href={registerHref}
-          className="font-bold text-[#ff5e7e] transition hover:text-white"
-        >
+        <Link href={registerHref} className="bk-ul font-medium">
           Regístrate aquí
         </Link>
       </p>

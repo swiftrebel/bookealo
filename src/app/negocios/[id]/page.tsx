@@ -6,13 +6,7 @@ import {
   type ServiceWithSchedules,
 } from "@/components/businesses/BusinessServicesSection";
 import { Artwork } from "@/components/ui/Artwork";
-import { Card } from "@/components/ui/Card";
-import {
-  ChevronLeftIcon,
-  ExternalLinkIcon,
-  MapPinIcon,
-  PhoneIcon,
-} from "@/components/ui/Icons";
+import { ChevronLeftIcon, ExternalLinkIcon } from "@/components/ui/Icons";
 import { getAuthContext } from "@/lib/auth";
 import { getNextPanamaDays } from "@/lib/dates";
 import { createClient } from "@/lib/supabase/server";
@@ -87,7 +81,9 @@ export default async function BusinessDetailPage({
 
   const { data: services } = await supabase
     .from("services")
-    .select("id, business_id, name, price, slot_duration_minutes, is_roofed, is_active")
+    .select(
+      "id, business_id, name, price, slot_duration_minutes, is_roofed, is_active",
+    )
     .eq("business_id", business.id)
     .eq("is_active", true)
     .order("created_at", { ascending: true });
@@ -130,48 +126,44 @@ export default async function BusinessDetailPage({
     Array.isArray(val) ? (val[0] ?? null) : (val ?? null);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#ff5e7e] transition hover:text-white"
-        >
-          <ChevronLeftIcon className="h-4 w-4" />
-          Volver a negocios
-        </Link>
-      </div>
+    <div>
+      {/* Breadcrumb */}
+      <Link
+        href="/"
+        className="bk-rise bk-tx inline-flex items-center gap-1.5 text-[14px] text-[#86868b] hover:text-[#f5f5f7]"
+      >
+        <ChevronLeftIcon className="h-4 w-4" />
+        Negocios
+      </Link>
 
-      {/* Portada y encabezado del negocio */}
-      <section className="relative overflow-hidden rounded-[24px] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-        <div className="relative h-[260px] w-full sm:h-[320px]">
-          <Artwork
-            src={business.cover_image_url}
-            alt={business.name}
-            seed={business.id}
-            size="hero"
-            className="rounded-none border-0"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0612] via-[#0a0612]/45 to-transparent" />
-        </div>
+      {/* Header editorial */}
+      <header
+        className="bk-rise mt-8 max-w-[760px] min-[900px]:mt-10"
+        style={{ animationDelay: "80ms" }}
+      >
+        {business.zone && (
+          <p className="text-[16px] font-medium tracking-[0.01em] text-[#86868b] min-[900px]:text-[18px]">
+            {business.zone}
+          </p>
+        )}
 
-        <div className="relative -mt-20 px-5 pb-6 sm:px-8 sm:pb-8">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-[-0.03em] text-white sm:text-[42px]">
-            {business.name}
-          </h1>
+        <h1 className="mt-2.5 text-[40px] font-semibold leading-[1.05] tracking-[-0.035em] text-[#f5f5f7] min-[900px]:text-[72px]">
+          {business.name}
+        </h1>
 
-          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85">
-            {business.zone && (
-              <span className="inline-flex items-center gap-1.5">
-                <MapPinIcon className="h-4 w-4 text-[#ff5e7e]" />
-                {business.zone}
-              </span>
-            )}
+        {amenities.length > 0 && (
+          <p className="mt-5 text-[16px] text-[#86868b] min-[900px]:text-[18px]">
+            {amenities.join(" · ")}
+          </p>
+        )}
+
+        {(business.phone || safeMapsUrl) && (
+          <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3 text-[15px] min-[900px]:mt-8">
             {business.phone && (
               <a
                 href={`tel:${business.phone.replace(/\s+/g, "")}`}
-                className="inline-flex items-center gap-1.5 transition hover:text-[#ff5e7e]"
+                className="bk-ul bk-tx tabular-nums"
               >
-                <PhoneIcon className="h-4 w-4 text-[#ff5e7e]" />
                 {business.phone}
               </a>
             )}
@@ -180,64 +172,75 @@ export default async function BusinessDetailPage({
                 href={safeMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-semibold text-[#ff5e7e] transition hover:text-white"
+                className="bk-ul bk-tx inline-flex items-center gap-1.5"
               >
                 <span>Ver en Google Maps</span>
-                <ExternalLinkIcon className="h-4 w-4" />
+                <ExternalLinkIcon className="h-3.5 w-3.5" />
               </a>
             )}
           </div>
+        )}
+      </header>
 
-          {amenities.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {amenities.map((amenity) => (
-                <span
-                  key={amenity}
-                  className="rounded-full border border-white/10 bg-white/[0.08] px-3 py-1 text-xs font-semibold text-white/90"
-                >
-                  {amenity}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Portada independiente */}
+      <div
+        className="group bk-rise mt-12 h-[240px] overflow-hidden rounded-[24px] sm:h-[340px] min-[900px]:mt-20 min-[900px]:h-[460px]"
+        style={{ animationDelay: "160ms" }}
+      >
+        <Artwork
+          src={business.cover_image_url}
+          alt={`Carátula de ${business.name}`}
+          seed={business.id}
+          size="cover"
+          className="rounded-none"
+        />
+      </div>
 
       {/* Servicios activos + flujo de reserva interactivo */}
-      <BusinessServicesSection
-        business={{
-          id: business.id,
-          name: business.name,
-          zone: business.zone,
-          cancellation_policy: business.cancellation_policy,
-        }}
-        services={servicesWithSchedules}
-        days={next14Days}
-        userRole={auth.profile?.role ?? null}
-        initialServiceId={firstParam(resolvedSearchParams.reservar)}
-        initialDateStr={firstParam(resolvedSearchParams.fecha)}
-        initialSlotTime={firstParam(resolvedSearchParams.hora)}
-      />
+      <div
+        className="bk-rise mt-16 min-[900px]:mt-32"
+        style={{ animationDelay: "240ms" }}
+      >
+        <BusinessServicesSection
+          business={{
+            id: business.id,
+            name: business.name,
+            zone: business.zone,
+            cancellation_policy: business.cancellation_policy,
+          }}
+          services={servicesWithSchedules}
+          days={next14Days}
+          userRole={auth.profile?.role ?? null}
+          initialServiceId={firstParam(resolvedSearchParams.reservar)}
+          initialDateStr={firstParam(resolvedSearchParams.fecha)}
+          initialSlotTime={firstParam(resolvedSearchParams.hora)}
+        />
+      </div>
 
       {/* Política de cancelación e información de pago */}
-      <section className="grid gap-4 sm:grid-cols-2">
-        <Card className="p-5">
-          <h2 className="text-base font-bold text-white">
+      <section
+        className="bk-rise mt-16 grid gap-12 sm:grid-cols-2 min-[900px]:mt-32 min-[900px]:gap-16"
+        style={{ animationDelay: "320ms" }}
+      >
+        <div className="border-t border-white/10 pt-6">
+          <h2 className="text-[20px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#f5f5f7]">
             Política de cancelación
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#a99ec4]">
+          <p className="mt-3 text-[16px] leading-[1.5] text-[#86868b] min-[900px]:text-[17px]">
             {business.cancellation_policy?.trim() ||
               "Consulta directamente con el negocio para cambios o cancelaciones de última hora."}
           </p>
-        </Card>
+        </div>
 
-        <Card className="p-5">
-          <h2 className="text-base font-bold text-white">Forma de pago</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#a99ec4]">
+        <div className="border-t border-white/10 pt-6">
+          <h2 className="text-[20px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#f5f5f7]">
+            Forma de pago
+          </h2>
+          <p className="mt-3 text-[16px] leading-[1.5] text-[#86868b] min-[900px]:text-[17px]">
             Por el momento no se realizan cobros en línea. El pago se realiza
             directamente en el lugar al asistir a tu reserva (precios en USD).
           </p>
-        </Card>
+        </div>
       </section>
     </div>
   );

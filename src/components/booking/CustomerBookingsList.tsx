@@ -7,7 +7,6 @@ import { cancelCustomerBookingAction } from "@/actions/bookings";
 import { Artwork } from "@/components/ui/Artwork";
 import { BookingStatusBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { CalendarIcon, ClockIcon, MapPinIcon } from "@/components/ui/Icons";
 import { ConfirmModal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/States";
@@ -74,14 +73,11 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
   if (bookings.length === 0) {
     return (
       <EmptyState
-        icon="🗓️"
+        icon={<CalendarIcon className="h-5 w-5" />}
         title="Aún no tienes reservas"
         description="Explora negocios activos y reserva tu primer horario en segundos."
         action={
-          <Link
-            href="/"
-            className="bk-grad-shadow inline-flex h-11 items-center justify-center rounded-[14px] px-6 text-sm font-bold text-white"
-          >
+          <Link href="/" className="bk-cta h-11 px-6 text-[14px]">
             Explorar negocios
           </Link>
         }
@@ -90,14 +86,14 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {feedback && (
         <div
           role={feedback.type === "error" ? "alert" : "status"}
-          className={`rounded-[14px] border px-4 py-3 text-sm font-medium ${
+          className={`rounded-[14px] border px-4 py-3 text-[14px] font-medium ${
             feedback.type === "error"
-              ? "border-[#ff3b6b]/40 bg-[#ff3b6b]/15 text-[#ff7a9b]"
-              : "border-emerald-400/35 bg-emerald-500/15 text-emerald-200"
+              ? "border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] text-[#ff6961]"
+              : "border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] text-[#34c470]"
           }`}
         >
           {feedback.message}
@@ -109,10 +105,10 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
         <button
           type="button"
           onClick={() => setTab("upcoming")}
-          className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+          className={`bk-tx h-[36px] cursor-pointer rounded-full border px-4 text-[13px] font-medium tabular-nums ${
             tab === "upcoming"
-              ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.28)]"
-              : "border-white/10 bg-white/[0.07] text-[#d9d0ee] hover:bg-white/[0.12]"
+              ? "border-transparent bg-[#f5f5f7] text-black"
+              : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
           }`}
         >
           Próximas ({upcoming.length})
@@ -120,10 +116,10 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
         <button
           type="button"
           onClick={() => setTab("past")}
-          className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+          className={`bk-tx h-[36px] cursor-pointer rounded-full border px-4 text-[13px] font-medium tabular-nums ${
             tab === "past"
-              ? "bk-grad border-transparent text-white shadow-[0_6px_18px_rgba(255,45,149,0.28)]"
-              : "border-white/10 bg-white/[0.07] text-[#d9d0ee] hover:bg-white/[0.12]"
+              ? "border-transparent bg-[#f5f5f7] text-black"
+              : "border-white/[0.09] bg-[#1a1a1c] text-[#86868b] hover:bg-[#222225] hover:text-[#f5f5f7]"
           }`}
         >
           Pasadas ({past.length})
@@ -132,7 +128,7 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
 
       {activeList.length === 0 ? (
         <EmptyState
-          icon={tab === "upcoming" ? "🗓️" : "📜"}
+          icon={<CalendarIcon className="h-5 w-5" />}
           title={
             tab === "upcoming"
               ? "No tienes reservas próximas"
@@ -145,26 +141,26 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
           }
           action={
             tab === "upcoming" ? (
-              <Link
-                href="/"
-                className="bk-grad-shadow inline-flex h-11 items-center justify-center rounded-[14px] px-5 text-sm font-bold text-white"
-              >
+              <Link href="/" className="bk-cta h-11 px-6 text-[14px]">
                 Buscar horarios
               </Link>
             ) : undefined
           }
         />
       ) : (
-        <div className="space-y-3">
+        <div className="border-t border-white/10">
           {activeList.map((booking) => {
             const canCancel =
               booking.isUpcoming &&
               (booking.status === "pending" || booking.status === "confirmed");
 
             return (
-              <Card key={booking.id} className="p-4 sm:p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <div className="flex min-w-0 flex-1 items-start gap-3.5">
+              <article
+                key={booking.id}
+                className="border-b border-white/10 py-6"
+              >
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 flex-1 items-start gap-4">
                     <Artwork
                       src={booking.businessCoverUrl}
                       alt={booking.businessName}
@@ -172,41 +168,41 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
                       size="sm"
                     />
 
-                    <div className="min-w-0 flex-1 space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-2.5">
                         {booking.businessId ? (
                           <Link
                             href={`/negocios/${booking.businessId}`}
-                            className="truncate text-base font-bold text-white transition hover:text-[#ff5e7e]"
+                            className="bk-ul truncate text-[17px] font-semibold tracking-[-0.015em] text-[#f5f5f7]"
                           >
                             {booking.businessName}
                           </Link>
                         ) : (
-                          <span className="truncate text-base font-bold text-white">
+                          <span className="truncate text-[17px] font-semibold tracking-[-0.015em] text-[#f5f5f7]">
                             {booking.businessName}
                           </span>
                         )}
                         <BookingStatusBadge status={booking.status} />
                       </div>
 
-                      <p className="text-sm font-medium text-white/90">
+                      <p className="text-[15px] text-[#f5f5f7]/80">
                         {booking.serviceName}
                       </p>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#a99ec4]">
-                        <span className="inline-flex items-center gap-1 capitalize">
-                          <CalendarIcon className="h-3.5 w-3.5 text-[#ff5e7e]" />
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-[#86868b]">
+                        <span className="inline-flex items-center gap-1.5 capitalize">
+                          <CalendarIcon className="h-3.5 w-3.5" />
                           {formatPanamaDate(booking.start_time)}
                         </span>
-                        <span className="inline-flex items-center gap-1">
-                          <ClockIcon className="h-3.5 w-3.5 text-[#ff5e7e]" />
+                        <span className="inline-flex items-center gap-1.5 tabular-nums">
+                          <ClockIcon className="h-3.5 w-3.5" />
                           {formatPanamaTimeRange(
                             booking.start_time,
                             booking.end_time,
                           )}
                         </span>
                         {booking.businessZone && (
-                          <span className="inline-flex items-center gap-1">
+                          <span className="inline-flex items-center gap-1.5">
                             <MapPinIcon className="h-3.5 w-3.5" />
                             {booking.businessZone}
                           </span>
@@ -215,12 +211,12 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-3 sm:border-t-0 sm:pt-0">
+                  <div className="flex items-center justify-between gap-5 sm:justify-end">
                     <div className="sm:text-right">
-                      <p className="text-lg font-extrabold text-white">
+                      <p className="text-[19px] font-semibold tracking-[-0.02em] text-[#f5f5f7] tabular-nums">
                         {formatUSD(booking.total_price)}
                       </p>
-                      <p className="text-[11px] text-[#a99ec4]">
+                      <p className="text-[12px] text-[#86868b]">
                         Pago en el lugar
                       </p>
                     </div>
@@ -236,7 +232,7 @@ export function CustomerBookingsList({ bookings }: CustomerBookingsListProps) {
                     )}
                   </div>
                 </div>
-              </Card>
+              </article>
             );
           })}
         </div>

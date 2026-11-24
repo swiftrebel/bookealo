@@ -20,12 +20,15 @@ export function RegisterForm({ nextPath }: { nextPath: string | null }) {
     : "/login";
 
   return (
-    <Card variant="surface" className="rounded-[24px] p-6 sm:p-7">
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-[-0.03em] text-white">
+    <Card className="bk-rise rounded-[24px] p-7 sm:p-8">
+      <div className="mb-7">
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[rgba(245,245,247,0.44)]">
+          Nueva cuenta
+        </p>
+        <h1 className="text-[30px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#f5f5f7]">
           Crear cuenta
         </h1>
-        <p className="mt-1.5 text-sm text-[#a99ec4]">
+        <p className="mt-2 text-[14px] leading-relaxed text-[#86868b]">
           Regístrate como cliente para reservar canchas y servicios en segundos.
         </p>
       </div>
@@ -33,7 +36,7 @@ export function RegisterForm({ nextPath }: { nextPath: string | null }) {
       {state.error && (
         <div
           role="alert"
-          className="mb-5 rounded-[14px] border border-[#ff3b6b]/40 bg-[#ff3b6b]/15 px-4 py-3 text-sm font-medium text-[#ff7092]"
+          className="mb-5 rounded-[14px] border border-[#ff6961]/30 bg-[rgba(255,69,58,0.14)] px-4 py-3 text-[13px] font-medium text-[#ff6961]"
         >
           {state.error}
         </div>
@@ -42,7 +45,7 @@ export function RegisterForm({ nextPath }: { nextPath: string | null }) {
       {state.success && (
         <div
           role="status"
-          className="mb-5 rounded-[14px] border border-emerald-400/35 bg-emerald-500/15 px-4 py-3 text-sm font-medium text-emerald-200"
+          className="mb-5 rounded-[14px] border border-[#34c470]/30 bg-[rgba(29,127,69,0.2)] px-4 py-3 text-[13px] font-medium text-[#34c470]"
         >
           {state.success}
         </div>
@@ -103,19 +106,16 @@ export function RegisterForm({ nextPath }: { nextPath: string | null }) {
           required
         />
 
-        <div className="pt-2">
+        <div className="pt-3">
           <Button type="submit" fullWidth size="lg" loading={isPending}>
             {isPending ? "Creando cuenta..." : "Crear cuenta"}
           </Button>
         </div>
       </form>
 
-      <p className="mt-6 text-center text-sm text-[#a99ec4]">
+      <p className="mt-7 text-center text-[14px] text-[#86868b]">
         ¿Ya tienes cuenta?{" "}
-        <Link
-          href={loginHref}
-          className="font-bold text-[#ff5e7e] transition hover:text-white"
-        >
+        <Link href={loginHref} className="bk-ul font-medium">
           Inicia sesión
         </Link>
       </p>

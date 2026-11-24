@@ -15,26 +15,26 @@ export function Input({
   ...props
 }: InputProps) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       {label && (
         <label
           htmlFor={id}
-          className="block text-sm font-semibold text-white/90"
+          className="block text-[13px] font-medium text-[#f5f5f7]/80"
         >
           {label}
         </label>
       )}
       <input
         id={id}
-        className={`h-11 w-full rounded-[14px] border bg-[rgba(26,15,44,0.72)] px-4 text-[15px] text-white placeholder-[#a99ec4]/70 outline-none backdrop-blur-xl transition focus:border-[#ff3b6b] disabled:opacity-50 ${
-          error ? "border-[#ff3b6b]" : "border-white/10"
+        className={`h-12 w-full rounded-[14px] border bg-[#1a1a1c] px-4 text-[15px] text-[#f5f5f7] placeholder-[#86868b] outline-none transition duration-300 focus:border-white/25 focus:bg-[#222225] disabled:opacity-45 ${
+          error ? "border-[#ff6961]/60" : "border-white/[0.09]"
         } ${className}`}
         {...props}
       />
       {error ? (
-        <p className="text-xs font-medium text-[#ff5e7e]">{error}</p>
+        <p className="text-xs font-medium text-[#ff6961]">{error}</p>
       ) : hint ? (
-        <p className="text-xs text-[#a99ec4]">{hint}</p>
+        <p className="text-xs text-[#86868b]">{hint}</p>
       ) : null}
     </div>
   );

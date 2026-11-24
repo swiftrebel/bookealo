@@ -17,13 +17,13 @@ type BadgeProps = {
 };
 
 const toneStyles: Record<BadgeTone, string> = {
-  neutral: "bg-white/[0.09] text-white/90 border-white/10",
-  pending: "bg-amber-500/15 text-amber-300 border-amber-400/30",
-  confirmed: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
-  blocked: "bg-violet-500/20 text-violet-200 border-violet-400/30",
-  cancelled: "bg-[#ff3b6b]/15 text-[#ff6b8f] border-[#ff3b6b]/30",
-  accent: "bk-grad text-white border-transparent",
-  info: "bg-sky-500/15 text-sky-300 border-sky-400/30",
+  neutral: "bg-white/[0.06] text-[#f5f5f7]/80 border-white/10",
+  pending: "bg-[rgba(255,159,10,0.16)] text-[#ffa530] border-[#ffa530]/20",
+  confirmed: "bg-[rgba(29,127,69,0.22)] text-[#34c470] border-[#34c470]/20",
+  blocked: "bg-[rgba(155,109,255,0.16)] text-[#b996ff] border-[#b996ff]/20",
+  cancelled: "bg-[rgba(255,69,58,0.16)] text-[#ff6961] border-[#ff6961]/20",
+  accent: "bg-[#1d7f45] text-white border-transparent",
+  info: "bg-[rgba(100,210,255,0.14)] text-[#64d2ff] border-[#64d2ff]/20",
 };
 
 export function Badge({
@@ -33,7 +33,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold leading-tight ${toneStyles[tone]} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-[0.02em] leading-tight ${toneStyles[tone]} ${className}`}
     >
       {children}
     </span>
